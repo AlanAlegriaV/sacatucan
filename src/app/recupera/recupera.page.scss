@@ -1,0 +1,72 @@
+/* Fondo del toolbar personalizado */
+.custom-toolbar {
+    --background: transparent;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  /* Diseño superior con colores verde y cian */
+  .top-design {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+    clip-path: ellipse(70% 80% at 50% 0%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  /* Estilo del texto "Recupera tu Contraseña" con borde */
+  .page-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #ffffff; /* Letras blancas */
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Simula un borde negro */
+    margin-top: 20px; /* Ajusta según sea necesario */
+  }
+  
+  /* Estilo del logo */
+  .logo {
+    width: 400px;
+    height: auto;
+    margin-top: 10px; /* Ajusta para que quede bien debajo del texto */
+  }
+  
+  /* Fondo blanco y margen superior */
+  ion-content {
+    --background: #ffffff;
+    margin-top: 200px;
+  }
+  
+  /* Estilo de los inputs */
+  .input-item {
+    --highlight-color-focused: #3b82f6;
+    --min-height: 50px;
+    border: none;
+    border-bottom: 2px solid #3b82f6;
+    margin: 20px 0;
+    background: none;
+  }
+  
+  ion-input {
+    --placeholder-color: #888;
+    color: #3b82f6;
+    font-size: 16px;
+  }
+  
+  /* Estilo del botón "Enviar Enlace" */
+  .recover-button {
+    --border-radius: 20px;
+    height: 50px;
+    font-size: 16px;
+    background-color: #3b82f6;
+    color: white;
+    margin-top: 20px;
+  }
+  

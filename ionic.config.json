@@ -1,0 +1,7 @@
+{
+  "name": "sacatucanApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

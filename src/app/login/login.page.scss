@@ -1,0 +1,83 @@
+/* Fondo del toolbar personalizado */
+.custom-toolbar {
+  --background: transparent; /* Mantén el toolbar transparente */
+  height: 60px; /* Ajusta la altura del toolbar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333; /* Color del texto */
+  font-weight: bold;
+  font-size: 24px;
+}
+
+/* Diseño superior con colores verde y cian */
+.top-design {
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 80%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* Asegúrate de que esté detrás del contenido */
+}
+
+/* Fondo blanco para el contenido */
+ion-content {
+  --background: #ffffff; /* Establece el fondo de la página a blanco */
+  margin-top: 150px; /* Ajusta esto dependiendo de la altura del diseño superior */
+}
+
+/* Estilo del logo */
+.logo {
+  width: 300px; /* Tamaño del logo */
+  height: auto;
+  display: block;
+  margin: 40px auto 20px; /* Ajustar el espacio superior e inferior */
+}
+
+/* Alinear los botones en una fila */
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Espaciado entre los botones */
+  margin-top: 20px;
+}
+
+/* Estilo general de los botones */
+ion-button {
+  --border-radius: 20px; /* Bordes redondeados */
+  height: 50px;
+  min-width: 130px; /* Ancho mínimo para los botones */
+  font-size: 16px;
+}
+
+/* Estilo para el botón "Logueate" */
+ion-button[color="primary"] {
+  --background: #3b82f6; /* Color azul para "Logueate" */
+  --color: white;
+}
+
+/* Estilo para el botón "Regístrate" */
+ion-button[color="light"] {
+  --background: #ffffff; /* Fondo blanco */
+  --color: #3b82f6; /* Texto azul */
+  border: 2px solid #3b82f6; /* Borde azul */
+}
+
+/* Texto informativo */
+p {
+  font-size: 16px;
+  color: #444; /* Color del texto */
+  margin: 20px 0;
+  text-align: center; /* Centrar el texto */
+}
+
+/* Imagen del botón de Google */
+.google-signin-image {
+  width: 80%; /* Ancho de la imagen */
+  max-width: 400px; /* Ancho máximo */
+  height: auto;
+  margin-top: 10px;
+}

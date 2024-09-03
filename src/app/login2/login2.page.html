@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar class="custom-toolbar">
+    <ion-title>Login 2</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="top-design"></div>
+
+  <br><br><br><br><br>    <br><br><br><br><br>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+          <ion-input placeholder="Correo Electrónico"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+          <ion-input placeholder="Contraseña" type="password"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <ion-button expand="block" fill="clear" color="primary" class="recover-password" (click)="navigateToRecupera()">Recuperar Contraseña</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <ion-button expand="block" color="primary" class="login-button">Logueate</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <p>o inicia con tu correo</p>
+        <img src="assets/glogin.png" alt="Sign in with Google" class="google-signin-image"/>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
