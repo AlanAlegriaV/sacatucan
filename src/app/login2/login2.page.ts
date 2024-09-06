@@ -13,4 +13,10 @@ export class Login2Page {
   navigateToRecupera() {
     this.router.navigate(['/recupera']);  // Redirige a la página 'recupera'
   }
+
+  navigateToHome() {
+    this.router.navigate(['/home']); // Navega a la página home
+  }
+  
 }
+

@@ -13,4 +13,9 @@ export class LoginPage {
   navigateToLogin2() {
     this.router.navigate(['/login2']);  // Redirige a login2
   }
+
+  // Nuevo método para redirigir a la página de registro
+  navigateToRegister() {
+    this.router.navigate(['/register']);  // Redirige a la página de registro
+  }
 }

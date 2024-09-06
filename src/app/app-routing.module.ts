@@ -22,7 +22,15 @@ const routes: Routes = [
   {
     path: 'recupera',
     loadChildren: () => import('./recupera/recupera.module').then( m => m.RecuperaPageModule)
+  },  {
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'walker',
+    loadChildren: () => import('./walker/walker.module').then( m => m.WalkerPageModule)
   }
+
 ];
 
 @NgModule({
