@@ -1,0 +1,64 @@
+/* Estilos para el card de paseadores */
+ion-card {
+    margin: 20px 0;
+    border-radius: 10px;
+    background-color: #222;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-card-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .paseador-item {
+    --background: transparent;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+  }
+  
+  .paseador-thumbnail {
+    width: 120px;  /* Aumentar el tamaño de la imagen */
+    height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  
+  ion-label {
+    padding-left: 20px;
+    color: #fff;
+  }
+  
+  ion-item {
+    --background: transparent;
+    padding: 10px 0;
+  }
+  
+  ion-button {
+    --border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  ion-footer {
+    --background: #222;
+    color: #fff;
+  }
+  
+  ion-tab-bar {
+    --background: #333;
+    --color-selected: #fff;
+    --color: #999;
+  }
+  
+  ion-tab-button {
+    --color-selected: #3b82f6;  /* Cambia el color del tab seleccionado */
+    --color: #999;
+  }

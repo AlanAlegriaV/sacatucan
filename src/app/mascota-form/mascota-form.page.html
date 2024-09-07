@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Publicar como Mascota</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Nombre de la Mascota</ion-label>
+          <ion-input [(ngModel)]="nombre"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Edad de la Mascota</ion-label>
+          <ion-input [(ngModel)]="edad" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Sexo de la Mascota</ion-label>
+          <ion-select [(ngModel)]="sexo">
+            <ion-select-option value="Macho">Macho</ion-select-option>
+            <ion-select-option value="Hembra">Hembra</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea [(ngModel)]="descripcion"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="foto">
+      <ion-col size="12" class="ion-text-center">
+        <img [src]="foto" alt="Foto de la Mascota" style="max-width: 150px; height: 150px; object-fit: cover;" />
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>Subir foto</ion-label>
+          <input type="file" (change)="subirFoto($event)" />
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button expand="block" (click)="publicarComoMascota()">Publicar como Mascota</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -20,6 +20,7 @@
   left: 0;
   z-index: -1;
 }
+
 ion-content {
   --background: #ffffff;
   margin-top: 150px;
@@ -30,6 +31,18 @@ ion-content {
   --highlight-color-focused: #3b82f6;
   --background: transparent;
   border-bottom: 2px solid #3b82f6;
+}
+
+/* Estilo de los placeholders */
+ion-input::part(placeholder) {
+  color: #888; /* Color del placeholder */
+  opacity: 1;  /* Asegúrate de que no esté opaco */
+}
+
+ion-input {
+  --placeholder-color: #888; /* Color del placeholder */
+  color: #3b82f6;
+  font-size: 16px;
 }
 
 ion-button {
