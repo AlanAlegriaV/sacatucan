@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Publicar como Paseador</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancelar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="publicarForm" (ngSubmit)="submit()">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Apellido</ion-label>
+      <ion-input formControlName="apellido"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input formControlName="correo"></ion-input> <!-- Este campo estará deshabilitado -->
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Subir imagen</ion-label>
+      <input type="file" (change)="onFileChange($event)" accept="image/*">
+    </ion-item>
+
+    <img *ngIf="publicarForm.value.imagen" [src]="publicarForm.value.imagen" alt="Previsualización de la imagen" style="width: 100%; height: auto; margin-top: 10px;">
+
+    <ion-button expand="full" type="submit" [disabled]="publicarForm.invalid">Guardar</ion-button>
+  </form>
+</ion-content>

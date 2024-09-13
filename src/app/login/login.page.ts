@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';  // Importa Router
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,14 +8,45 @@ import { Router } from '@angular/router';  // Importa Router
 })
 export class LoginPage {
 
-  constructor(private router: Router) {}  // Inyecta Router
+  usuario = {
+    correo: '',
+    password: ''
+  };
 
-  navigateToLogin2() {
-    this.router.navigate(['/login2']);  // Redirige a login2
+  error: string = ''; // Variable para almacenar el mensaje de error
+
+  constructor(private router: Router) { }
+
+
+  goToRegister() {
+    this.router.navigate(['/registro']);  // Asegúrate de que la ruta '/registro' esté configurada
   }
 
-  // Nuevo método para redirigir a la página de registro
-  navigateToRegister() {
-    this.router.navigate(['/register']);  // Redirige a la página de registro
+
+  iniciarSesion() {
+    // Obtener los usuarios almacenados en localStorage
+    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+
+    // Buscar el usuario por correo y contraseña
+    const usuarioValido = usuarios.find((user: any) => 
+      user.correo === this.usuario.correo && user.password === this.usuario.password
+    );
+
+    // Depuración: Comparar contraseñas en consola
+    console.log("Contraseña almacenada:", usuarioValido ? usuarioValido.password : 'No encontrada');
+    console.log("Contraseña ingresada:", this.usuario.password);
+
+    if (usuarioValido) {
+      // Si el usuario es válido, limpiar el error y redirigir a la página principal
+      this.error = '';  
+      alert('Inicio de sesión exitoso');
+      // Guardar el correo del usuario logueado en localStorage
+      localStorage.setItem('correoLogueado', usuarioValido.correo);
+      // Redirigir a la página principal
+      this.router.navigate(['/mainpage']);
+    } else {
+      // Si no coincide, mostrar mensaje de error
+      this.error = 'Correo o contraseña incorrectos. Intenta nuevamente.';
+    }
   }
 }

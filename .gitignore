@@ -1,73 +1,70 @@
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
-# Optional npm cache directory
-.npm
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
 
-# Optional REPL history
-.node_repl_history
+*.log
+log.txt
 
-# Output of 'npm pack'
-*.tgz
 
-# Optional eslint cache
-.eslintcache
+/.sourcemaps
+/.versions
+/coverage
 
-# Optional stylelint cache
-.stylelintcache
+# Ionic
+/.ionic
+/www
+/platforms
+/plugins
 
-# Dependency directories
-jspm_packages/
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
-# TypeScript v1 declaration files
-typings/
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
 
-# Optional cache directory for terser
-.terser-cache/
-
-# Optional cache directories for various bundlers/build tools
-/.cache
-/.parcel-cache
-/.nuxt
-/.next
-/.expo
-/.yarn-cache
-/.cache-loader
-/.cache-require
-
-# Optional IDE/editor private files
-/.idea
-/.vscode
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
 *.sublime-project
 *.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+
+# Miscellaneous
+/.angular
+/.angular/cache
+.sass-cache/
+/.nx
+/.nx/cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
 .DS_Store
-
-# Environment variables
-.env
-
-# Build output (Ionic and other builds)
-www/
-dist/
-build/
-
-# Compiled source
-lib/
-
-# Angular specific cache and build output
-.angular/
-.angular/cache/
-
-# Capacitor directories (for Ionic projects using Capacitor)
-ios/
-android/
-
-# Other build-related directories
-.cordova/
-platforms/
-plugins/
-
-# Firebase cache
-firebase-debug.log
+Thumbs.db

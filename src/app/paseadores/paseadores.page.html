@@ -1,0 +1,11 @@
+<ion-content>
+  <br>
+  <div class="paseadores-container">
+    <ion-card *ngFor="let paseador of paseadores" class="paseador-card" (click)="verDetalle(paseador)">
+      <img [src]="paseador.imagen" alt="Foto Paseador" />
+      <ion-card-title>{{ paseador.nombre }} {{ paseador.apellido }}</ion-card-title>
+    </ion-card>
+  </div>
+
+  <ion-button expand="full" (click)="publicarseComoPaseador()">Publícate como Paseador</ion-button>
+</ion-content>

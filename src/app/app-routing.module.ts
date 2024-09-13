@@ -3,43 +3,64 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'home',
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  },
+  {
     path: '',
-    redirectTo: 'login',  // Página inicial es el registro
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
-    path: 'register',
-    loadChildren: () => import('./register/register.module').then(m => m.RegisterPageModule)
+    path: 'registro',
+    loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'login2',
-    loadChildren: () => import('./login2/login2.module').then(m => m.Login2PageModule)
+    path: 'mainpage',
+    loadChildren: () => import('./mainpage/mainpage.module').then( m => m.MainpagePageModule)
   },
   {
-    path: 'main',
-    loadChildren: () => import('./main/main.module').then(m => m.MainPageModule)
+    path: 'perfil',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
-    path: 'paseador-form',
-    loadChildren: () => import('./paseador-form/paseador-form.module').then(m => m.PaseadorFormPageModule)
+    path: 'paseadores',
+    loadChildren: () => import('./paseadores/paseadores.module').then( m => m.PaseadoresPageModule)
   },
   {
-    path: 'recupera',
-    loadChildren: () => import('./recupera/recupera.module').then(m => m.RecuperaPageModule)
+    path: 'detalle-paseador',
+    loadChildren: () => import('./detalle-paseador/detalle-paseador.module').then( m => m.DetallePaseadorPageModule)
   },
   {
-    path: 'mascota-form',
-    loadChildren: () => import('./mascota-form/mascota-form.module').then( m => m.MascotaFormPageModule)
+    path: 'mascotas',
+    loadChildren: () => import('./mascotas/mascotas.module').then( m => m.MascotasPageModule)
   },
-
+  {
+    path: 'publicar-modal',
+    loadChildren: () => import('./publicar-modal/publicar-modal.module').then( m => m.PublicarModalPageModule)
+  },
+  {
+    path: 'publicar-mascota-modal',
+    loadChildren: () => import('./publicar-mascota-modal/publicar-mascota-modal.module').then( m => m.PublicarMascotaModalPageModule)
+  },
+  {
+    path: 'mascotas-modal-edit',
+    loadChildren: () => import('./mascotas-modal-edit/mascotas-modal-edit.module').then( m => m.MascotasModalEditPageModule)
+  },
+  {
+    path: 'detalle-mascota',
+    loadChildren: () => import('./detalle-mascota/detalle-mascota.module').then( m => m.DetalleMascotaPageModule)
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

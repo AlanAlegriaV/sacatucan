@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Publicar Mascota</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancelar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="mascotaForm" (ngSubmit)="guardarMascota()">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Edad</ion-label>
+      <ion-input formControlName="edad"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Sexo</ion-label>
+      <ion-select formControlName="sexo">
+        <ion-select-option value="Macho">Macho</ion-select-option>
+        <ion-select-option value="Hembra">Hembra</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion"></ion-textarea>
+    </ion-item>
+
+    <!-- Campo para subir imagen -->
+    <ion-item>
+      <ion-label>Subir imagen</ion-label>
+      <input type="file" (change)="onFileChange($event)" accept="image/*" />
+    </ion-item>
+
+    <!-- Correo logueado oculto -->
+    <ion-item>
+      <ion-input formControlName="correo" type="hidden"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="mascotaForm.invalid">Guardar</ion-button>
+  </form>
+</ion-content>

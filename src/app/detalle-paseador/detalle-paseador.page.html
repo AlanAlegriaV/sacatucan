@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/mainpage/paseadores"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ paseador.nombre }} {{ paseador.apellido }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <img [src]="paseador.imagen" alt="Paseador">
+    <ion-card-content>
+      <ion-card-title>{{ paseador.nombre }} {{ paseador.apellido }}</ion-card-title>
+      <p>{{ paseador.descripcion }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Botón para contactar al paseador -->
+  <ion-button expand="full" color="primary" *ngIf="!esMiPublicacion()" (click)="contactar()">
+    Contactar
+  </ion-button>
+</ion-content>

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Mascota</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancelar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="mascotaForm" (ngSubmit)="guardarCambios()">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Edad</ion-label>
+      <ion-input formControlName="edad"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Sexo</ion-label>
+      <ion-select formControlName="sexo">
+        <ion-select-option value="Macho">Macho</ion-select-option>
+        <ion-select-option value="Hembra">Hembra</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion"></ion-textarea>
+    </ion-item>
+
+    <!-- Input para cargar la imagen -->
+    <ion-item>
+      <ion-label>Imagen</ion-label>
+      <input type="file" (change)="onFileChange($event)" accept="image/*" />
+    </ion-item>
+
+    <!-- Previsualización de la imagen cargada -->
+    <div *ngIf="imagenPrevisualizacion">
+      <img [src]="imagenPrevisualizacion" alt="Previsualización de la imagen" style="width: 100%; max-height: 200px; object-fit: cover;" />
+    </div>
+
+    <ion-button expand="full" type="submit" [disabled]="mascotaForm.invalid">Guardar Cambios</ion-button>
+  </form>
+</ion-content>

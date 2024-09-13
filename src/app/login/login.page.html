@@ -1,33 +1,60 @@
 <ion-header>
-  <ion-toolbar class="custom-toolbar">
-    <ion-title>Sacatucan</ion-title>
-  </ion-toolbar>
+  
 </ion-header>
 
 <ion-content>
   <div class="top-design"></div>
 
   <ion-grid>
+    <!-- Logo -->
     <ion-row class="ion-justify-content-center">
       <ion-col size="12" class="ion-text-center">
         <img src="assets/logo.png" alt="Sacatucan Logo" class="logo"/>
       </ion-col>
     </ion-row>
 
-    <ion-row class="ion-justify-content-center button-group">
-      <ion-col size="auto" class="ion-text-center">
-        <ion-button expand="block" color="primary" (click)="navigateToLogin2()">Logueate</ion-button>
-      </ion-col>
-      <ion-col size="auto" class="ion-text-center">
-        <ion-button expand="block" color="light" (click)="navigateToRegister()">Regístrate</ion-button>
+    <!-- Campo de Correo Electrónico -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <ion-item class="input-item" lines="full"> 
+          <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+          <ion-input placeholder="Correo Electrónico" [(ngModel)]="usuario.correo"></ion-input>
+        </ion-item>
       </ion-col>
     </ion-row>
 
+    <!-- Campo de Contraseña -->
     <ion-row class="ion-justify-content-center">
-      <ion-col size="12" class="ion-text-center">
-        <p>o inicia con tu correo</p>
-        <img src="assets/glogin.png" alt="Sign in with Google" class="google-signin-image"/>
+      <ion-col size="10" class="ion-text-center">
+        <ion-item class="input-item" lines="full"> 
+          <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+          <ion-input placeholder="Contraseña" type="password" [(ngModel)]="usuario.password"></ion-input>
+        </ion-item>
       </ion-col>
     </ion-row>
+
+    <!-- Botón de Iniciar Sesión -->
+    <ion-row class="ion-justify-content-center button-group">
+      <ion-col size="auto" class="ion-text-center">
+        <ion-button expand="block" color="primary" (click)="iniciarSesion()">Iniciar Sesión</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- Botón de Registro -->
+    <ion-row class="ion-justify-content-center button-group">
+      <ion-col size="auto" class="ion-text-center">
+        <ion-button expand="block" color="light" (click)="goToRegister()">Regístrate</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- Mostrar el error si existe -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="10" class="ion-text-center">
+        <ion-item *ngIf="error">
+          <ion-label color="danger">{{ error }}</ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
   </ion-grid>
 </ion-content>

@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-buttons slot="start">
+    <ion-button (click)="goToLogin()">Volver</ion-button>
+  </ion-buttons>
+</ion-header>
+
+<ion-content>
+
+  <div class="top-design"></div>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" class="ion-text-center">
+        <img src="assets/logo.png" alt="Sacatucan Logo" class="logo"/>
+      </ion-col>
+    </ion-row>
+
+    <form (ngSubmit)="registrarUsuario()" #form="ngForm">
+
+      <!-- Campo de Correo Electrónico -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+            <ion-input placeholder="Correo Electrónico" type="email" [(ngModel)]="usuario.correo" name="correo" required email></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="form.submitted && !form.controls['correo']?.valid" class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-text color="danger">Correo inválido.</ion-text>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Nombre -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+            <ion-input placeholder="Nombre" type="text" [(ngModel)]="usuario.nombre" name="nombre" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Apellido -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+            <ion-input placeholder="Apellido" type="text" [(ngModel)]="usuario.apellido" name="apellido" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Teléfono -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="call-outline" slot="start" color="primary"></ion-icon>
+            <ion-input placeholder="Teléfono" type="tel" [(ngModel)]="usuario.telefono" name="telefono" required pattern="^[0-9]{9,12}$"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Contraseña -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+            <ion-input placeholder="Contraseña" type="password" [(ngModel)]="usuario.password" name="password" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Repetir Contraseña -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+            <ion-input placeholder="Repetir Contraseña" type="password" [(ngModel)]="usuario.repetirPassword" name="repetirPassword" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Región -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="location-outline" slot="start" color="primary"></ion-icon>
+            <ion-select placeholder="Región" [(ngModel)]="usuario.region" name="region" (ionChange)="onRegionChange($event.target.value)" required>
+              <ion-select-option *ngFor="let region of regiones" [value]="region.region">{{ region.region }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Campo de Comuna -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10" class="ion-text-center">
+          <ion-item class="input-item" lines="full"> 
+            <ion-icon name="map-outline" slot="start" color="primary"></ion-icon>
+            <ion-select placeholder="Comuna" [(ngModel)]="usuario.comuna" name="comuna" required>
+              <ion-select-option *ngFor="let comuna of comunas" [value]="comuna">{{ comuna }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Botón de Registro -->
+      <ion-row class="ion-justify-content-center button-group">
+        <ion-col size="auto" class="ion-text-center">
+          <ion-button expand="block" color="primary" type="submit">Registrarse</ion-button>
+        </ion-col>
+      </ion-row>
+
+    </form>
+  </ion-grid>
+</ion-content>

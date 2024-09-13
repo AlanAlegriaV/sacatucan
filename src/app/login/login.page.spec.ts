@@ -1,17 +1,33 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LoginPage } from './login.page';
+/* Logo */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
 
-describe('LoginPage', () => {
-  let component: LoginPage;
-  let fixture: ComponentFixture<LoginPage>;
+.logo {
+  width: 150px;
+  height: auto;
+}
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LoginPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+/* Estilo personalizado para los inputs */
+.custom-item {
+  --highlight-color-focused: #3b82f6; /* Color azul para el borde de foco */
+  --background: #f9f9f9; /* Fondo claro */
+  --border-radius: 12px;
+  margin: 10px 0;
+}
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+/* Estilo personalizado para los botones */
+.custom-button {
+  --background: #3b82f6; /* Color azul para el botón */
+  --border-radius: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.custom-button.outline {
+  --border-color: #3b82f6;
+  --color: #3b82f6;
+}

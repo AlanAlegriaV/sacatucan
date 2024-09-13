@@ -1,0 +1,143 @@
+<ion-header>
+
+</ion-header>
+
+<ion-content>
+  <form>
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input [(ngModel)]="usuario.nombre" name="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Apellido</ion-label>
+      <ion-input [(ngModel)]="usuario.apellido" name="apellido"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input [(ngModel)]="usuario.correo" name="correo" disabled></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Teléfono</ion-label>
+      <ion-input [(ngModel)]="usuario.telefono" name="telefono" type="tel"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Región</ion-label>
+      <ion-input [value]="usuario.region" disabled></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Comuna</ion-label>
+      <ion-input [value]="usuario.comuna" disabled></ion-input>
+    </ion-item>
+
+    <!-- Botón para cambiar comuna -->
+    <ion-button expand="full" color="medium" (click)="mostrarCambioComuna()">Cambiar Comuna</ion-button>
+    <div *ngIf="cambiarComuna">
+      <ion-item>
+        <ion-label>Región</ion-label>
+        <ion-select [(ngModel)]="regionTemporal" name="regionTemporal" (ionChange)="onRegionChange($event.target.value)">
+          <ion-select-option *ngFor="let region of regiones" [value]="region.region">{{ region.region }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Comuna</ion-label>
+        <ion-select [(ngModel)]="comunaTemporal" name="comunaTemporal">
+          <ion-select-option *ngFor="let comuna of comunas" [value]="comuna">{{ comuna }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button expand="full" color="success" (click)="guardarComuna()">Aceptar</ion-button>
+      <ion-button expand="full" color="danger" (click)="cancelarComuna()">Cancelar</ion-button>
+    </div>
+
+    <!-- Botón para cambiar contraseña -->
+    <ion-button expand="full" color="medium" (click)="mostrarCambioPassword()">Cambiar Contraseña</ion-button>
+    <div *ngIf="cambiarPassword">
+      <ion-item>
+        <ion-label>Contraseña Actual</ion-label>
+        <ion-input [(ngModel)]="passwordActual" name="passwordActual" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Nueva Contraseña</ion-label>
+        <ion-input [(ngModel)]="nuevaPassword" name="nuevaPassword" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Repetir Nueva Contraseña</ion-label>
+        <ion-input [(ngModel)]="repetirPassword" name="repetirPassword" type="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" color="success" (click)="guardarPassword()">Aceptar</ion-button>
+      <ion-button expand="full" color="danger" (click)="cancelarPassword()">Cancelar</ion-button>
+    </div>
+
+    <!-- Botón para ver/ocultar mensajes -->
+    <ion-button expand="full" color="primary" (click)="toggleMensajes()">
+      {{ mostrarMensajes ? 'Ocultar Mensajes' : 'Ver Mensajes' }}
+    </ion-button>
+
+    <div *ngIf="mostrarMensajes">
+      <h2>Mis Mensajes</h2>
+      <ion-list>
+        <ion-item *ngFor="let mensaje of mensajesRecibidos">
+          <ion-label>
+            <h3>{{ mensaje.nombre }} {{ mensaje.apellido }}</h3>
+            <p>{{ mensaje.correo }}</p>
+            <p>{{ mensaje.telefono }}</p>
+            <p>{{ mensaje.texto }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <!-- Botones para ver publicaciones -->
+    <ion-button expand="full" color="primary" (click)="togglePaseadores()">
+      {{ mostrarPaseadores ? 'Ocultar mi publicación de paseador' : 'Ver mi publicación de paseador' }}
+    </ion-button>
+
+    <div *ngIf="mostrarPaseadores">
+      <h2>Mi Publicación como Paseador</h2>
+      <ion-card *ngFor="let paseador of misPaseadores">
+        <img [src]="paseador.imagen" alt="{{ paseador.nombre }}">
+        <ion-card-header>
+          <ion-card-title>{{ paseador.nombre }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ paseador.descripcion }}</p>
+        </ion-card-content>
+
+        <ion-button expand="full" color="secondary" (click)="editarPaseador(paseador)">Editar Paseador</ion-button>
+        <ion-button expand="full" color="danger" (click)="eliminarPaseador()">Eliminar Paseador</ion-button>
+      </ion-card>
+    </div>
+
+    <ion-button expand="full" color="secondary" (click)="toggleMascotas()">
+      {{ mostrarMascotas ? 'Ocultar mis mascotas' : 'Ver mis mascotas' }}
+    </ion-button>
+
+    <div *ngIf="mostrarMascotas">
+      <h2>Mis Mascotas</h2>
+      <ion-card *ngFor="let mascota of misMascotas">
+        <img [src]="mascota.imagen" alt="{{ mascota.nombre }}">
+        <ion-card-header>
+          <ion-card-title>{{ mascota.nombre }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ mascota.descripcion }}</p>
+        </ion-card-content>
+
+        <ion-button expand="full" color="secondary" (click)="editarMascota(mascota)">Editar Mascota</ion-button>
+        <ion-button expand="full" color="danger" (click)="eliminarMascota(mascota)">Eliminar Mascota</ion-button>
+      </ion-card>
+    </div>
+
+    <!-- Botón para guardar cambios -->
+    <ion-button expand="full" (click)="guardarCambios()">Guardar Cambios</ion-button>
+  </form>
+</ion-content>
