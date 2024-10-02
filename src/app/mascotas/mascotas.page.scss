@@ -26,7 +26,11 @@ ion-card {
   text-align: center;
 }
 
-.publicar-button {
-  margin-top: 20px;
-  margin-bottom: 20px;
+
+.button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
 }
