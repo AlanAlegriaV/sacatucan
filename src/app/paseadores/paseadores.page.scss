@@ -1,3 +1,15 @@
+  /* Diseño superior con colores */
+  .top-design {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+    clip-path: ellipse(70% 80% at 50% 0%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
 .paseadores-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);  /* Dos columnas por fila */
