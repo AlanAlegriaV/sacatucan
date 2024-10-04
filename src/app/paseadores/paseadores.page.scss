@@ -10,39 +10,51 @@
     z-index: -1;
   }
 
-  .button-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-  }
-
-.paseadores-container {
+  .paseadores-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);  /* Dos columnas por fila */
-    gap: 10px;  /* Espacio entre las tarjetas */
+    grid-template-columns: repeat(2, 1fr);
+    /* Dos columnas por fila */
+    gap: 10px;
+    /* Espacio entre las tarjetas */
     padding: 10px;
   }
-  
+
   .paseador-card {
     background-color: rgb(255, 255, 255);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
     padding: 10px;
-    height: 200px;  /* Altura de la tarjeta para uniformar */
+    height: 200px;
+    /* Altura de la tarjeta para uniformar */
   }
-  
+
   .paseador-card img {
-    width: 100px;  /* Ancho de la imagen */
-    height: 100px;  /* Alto de la imagen */
-    object-fit: cover;  /* Ajuste de la imagen */
+    width: 100px;
+    /* Ancho de la imagen */
+    height: 100px;
+    /* Alto de la imagen */
+    object-fit: cover;
+    /* Ajuste de la imagen */
     border-radius: 10px;
   }
-  
+
   .paseador-card ion-card-title {
     font-size: 14px;
     margin-top: 10px;
   }
-  
+
+  /* Estilo general de los botones */
+  ion-button {
+    --border-radius: 20px;
+    /* Bordes redondeados */
+    height: 50px;
+    min-width: 130px;
+    /* Ancho mínimo para los botones */
+    font-size: 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
