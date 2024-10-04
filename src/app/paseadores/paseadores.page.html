@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-  <ion-title>Paseadores</ion-title>
+    <ion-title>Paseadores</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -9,12 +9,17 @@
   <br>
   <div class="paseadores-container">
     <ion-card *ngFor="let paseador of paseadores" class="paseador-card" (click)="verDetalle(paseador)">
-      <img [src]="paseador.imagen" alt="Foto Paseador" />
-      <ion-card-title>{{ paseador.nombre }} {{ paseador.apellido }}</ion-card-title>
+      <ion-card-header>
+        <img [src]="paseador.imagen" alt="Foto Paseador" />
+        <ion-card-title>{{ paseador.nombre }} {{ paseador.apellido }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ paseador.descripcion }}</p>
+      </ion-card-content>
     </ion-card>
   </div>
 
   <div class="button-container">
-  <ion-button expand="full" (click)="publicarseComoPaseador()">Publícate como Paseador</ion-button>
-  </div>  
+    <ion-button expand="full" (click)="publicarseComoPaseador()">Publícate como Paseador</ion-button>
+  </div>
 </ion-content>
