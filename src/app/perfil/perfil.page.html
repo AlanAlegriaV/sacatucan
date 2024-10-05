@@ -1,5 +1,10 @@
 <ion-header>
-
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -42,8 +47,10 @@
     <div *ngIf="cambiarComuna">
       <ion-item>
         <ion-label>Región</ion-label>
-        <ion-select [(ngModel)]="regionTemporal" name="regionTemporal" (ionChange)="onRegionChange($event.target.value)">
-          <ion-select-option *ngFor="let region of regiones" [value]="region.region">{{ region.region }}</ion-select-option>
+        <ion-select [(ngModel)]="regionTemporal" name="regionTemporal"
+          (ionChange)="onRegionChange($event.target.value)">
+          <ion-select-option *ngFor="let region of regiones" [value]="region.region">{{ region.region
+            }}</ion-select-option>
         </ion-select>
       </ion-item>
 
