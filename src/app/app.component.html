@@ -5,22 +5,12 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
-    <ion-list>
-      <ion-item [routerLink]="'/home'">
-        <ion-icon slot="start" name="home-outline"></ion-icon>
-        <ion-label>Inicio</ion-label>
-      </ion-item>
-      <ion-item [routerLink]="'/perfil'">
-        <ion-icon slot="start" name="person-outline"></ion-icon>
-        <ion-label>Perfil</ion-label>
-      </ion-item>
-      <ion-item [routerLink]="'/mascotas'">
-        <ion-icon slot="start" name="paw-outline"></ion-icon>
-        <ion-label>Mascotas</ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+  <ion-content></ion-content>
+  <ion-footer>
+    <ion-button expand="full" color="primary" (click)="cerrarSesion()" class="cerrar-sesion-boton">
+      Cerrar Sesión
+    </ion-button>
+  </ion-footer>
 </ion-menu>
 
 <!-- Área principal de la aplicación -->

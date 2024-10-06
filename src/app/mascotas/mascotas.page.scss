@@ -16,6 +16,10 @@
     left: 0;
     z-index: -1;
   }
+  
+  ion-title{
+    text-align: center;
+  }
 
 ion-card {
   width: 100%;
@@ -27,7 +31,13 @@ ion-card {
 }
 
 
-.button-container {
+ion-button {
+  --border-radius: 20px;
+  /* Bordes redondeados */
+  height: 50px;
+  min-width: 130px;
+  /* Ancho mínimo para los botones */
+  font-size: 16px;
   position: fixed;
   bottom: 0;
   left: 0;
