@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router'; // Importamos Router para hacer la redirección
+import { MenuController } from '@ionic/angular'; // Importamos el controlador de menú
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { Router, NavigationEnd } from '@angular/router'; // Importamos Router pa
 export class AppComponent {
   usuarioAutenticado: boolean = false;  // Variable para saber si hay un usuario autenticado
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private menuCtrl:  MenuController) {
     // Escuchar los cambios de ruta para verificar la autenticación cada vez que el usuario navega
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -35,6 +36,7 @@ export class AppComponent {
 
   // Función para cerrar sesión
   cerrarSesion() {
+    this.menuCtrl.close().then(() => {
     // Eliminar la información de sesión (correo logueado)
     localStorage.removeItem('correoLogueado');  
     localStorage.removeItem('usuarioActual'); // También puedes eliminar otros datos si es necesario
@@ -44,5 +46,6 @@ export class AppComponent {
 
     // Redirigir al usuario a la página de login
     this.router.navigate(['/login']);
+    });
   }
 }

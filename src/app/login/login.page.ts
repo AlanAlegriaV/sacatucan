@@ -17,6 +17,11 @@ export class LoginPage {
 
   constructor(private router: Router) { }
 
+  ionViewWillEnter() {
+    // Limpiar los datos del formulario cuando se accede a la página de login
+    this.usuario.correo = '';
+    this.usuario.password = '';
+  }
 
   goToRegister() {
     this.router.navigate(['/registro']);  // Asegúrate de que la ruta '/registro' esté configurada
