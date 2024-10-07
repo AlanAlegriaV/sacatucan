@@ -87,47 +87,6 @@
       <ion-button expand="full" color="danger" (click)="cancelarPassword()">Cancelar</ion-button>
     </div>
 
-    <!-- Botones para ver publicaciones -->
-    <ion-button expand="full" color="primary" (click)="togglePaseadores()">
-      {{ mostrarPaseadores ? 'Ocultar mi publicación de paseador' : 'Ver mi publicación de paseador' }}
-    </ion-button>
-
-    <div *ngIf="mostrarPaseadores">
-      <h2>Mi Publicación como Paseador</h2>
-      <ion-card *ngFor="let paseador of misPaseadores">
-        <img [src]="paseador.imagen" alt="{{ paseador.nombre }}">
-        <ion-card-header>
-          <ion-card-title>{{ paseador.nombre }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>{{ paseador.descripcion }}</p>
-        </ion-card-content>
-
-        <ion-button expand="full" color="secondary" (click)="editarPaseador(paseador)">Editar Paseador</ion-button>
-        <ion-button expand="full" color="danger" (click)="eliminarPaseador()">Eliminar Paseador</ion-button>
-      </ion-card>
-    </div>
-
-    <ion-button expand="full" color="secondary" (click)="toggleMascotas()">
-      {{ mostrarMascotas ? 'Ocultar mis mascotas' : 'Ver mis mascotas' }}
-    </ion-button>
-
-    <div *ngIf="mostrarMascotas">
-      <h2>Mis Mascotas</h2>
-      <ion-card *ngFor="let mascota of misMascotas">
-        <img [src]="mascota.imagen" alt="{{ mascota.nombre }}">
-        <ion-card-header>
-          <ion-card-title>{{ mascota.nombre }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>{{ mascota.descripcion }}</p>
-        </ion-card-content>
-
-        <ion-button expand="full" color="secondary" (click)="editarMascota(mascota)">Editar Mascota</ion-button>
-        <ion-button expand="full" color="danger" (click)="eliminarMascota(mascota)">Eliminar Mascota</ion-button>
-      </ion-card>
-    </div>
-
     <!-- Botón para guardar cambios -->
     <ion-button expand="full" (click)="guardarCambios()">Guardar Cambios</ion-button>
   </form>

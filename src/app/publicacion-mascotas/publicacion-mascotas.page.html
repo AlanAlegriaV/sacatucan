@@ -1,10 +1,37 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>Mis Mascotas</ion-title>
   </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
+</ion-header>
+
+<ion-content>
   <div class="top-design"></div>
+
+
+  <!-- Logo -->
+  <ion-row class="ion-justify-content-center">
+    <img src="assets/logo.png" alt="Sacatucan Logo" class="logo" />
+  </ion-row>
+
   
-  </ion-content>
+  <div *ngIf="mostrarMascotas">
+    <ion-card *ngFor="let mascota of misMascotas">
+      <img [src]="mascota.imagen" alt="{{ mascota.nombre }}">
+      <ion-card-header>
+        <ion-card-title>{{ mascota.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ mascota.descripcion }}</p>
+      </ion-card-content>
+      
+
+      <ion-button expand="full" color="secondary" (click)="editarMascota(mascota)">Editar Mascota</ion-button>
+      <ion-button expand="full" color="danger" (click)="eliminarMascota(mascota)">Eliminar Mascota</ion-button>
+    </ion-card>
+  
+</div>
+
+</ion-content>

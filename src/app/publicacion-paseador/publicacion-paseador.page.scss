@@ -1,19 +1,73 @@
-  /* Fondo blanco para el contenido */
-  ion-content {
-    --background: #ffffff;
-    /* Establece el fondo de la página a blanco */
-    margin-top: 150px;
-    /* Ajusta esto dependiendo de la altura del diseño superior */
+/* Fondo del toolbar personalizado */
+.custom-toolbar {
+  --background: transparent;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+
+/* Fondo blanco para el contenido */
+ion-content {
+  --background: #ffffff;
+  /* Establece el fondo de la página a blanco */
+  margin-top: 10px;
+  /* Ajusta esto dependiendo de la altura del diseño superior */
 }
 
 /* Diseño superior con colores verde y cian */
 .top-design {
-    width: 100%;
-    height: 200px;
-    background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
-    clip-path: ellipse(70% 80% at 50% 0%);
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+  clip-path: ellipse(70% 80% at 50% 0%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* Estilo del logo */
+.logo {
+  width: 200px;
+  /* Tamaño del logo */
+  height: auto;
+  display: block;
+  margin: 20px auto 10px;
+  /* Ajustar el espacio superior e inferior */
+}
+
+ion-button[color="danger"] {
+  --background: #ff5252;
+  --color: white;
+}
+
+/* Botones de acción secundaria */
+ion-button[color="secondary"] {
+  --background: #f9f9f9;
+  --color: #333;
+  border: 1px solid #ccc;
+}
+
+ion-card {
+  max-width: 75%; /* Ajusta el ancho máximo del card al 50% */
+  margin: 0 auto; /* Centra la tarjeta */
+}
+
+ion-card img {
+  width: 100%; /* Hace que la imagen se ajuste al ancho del card */
+  max-width: 100%; /* Previene que la imagen crezca demasiado */
+}
+
+ion-card-title {
+  font-size: 1.2rem; /* Reduce el tamaño del título */
+  text-align: center; /* Centra el título */
+}
+
+ion-card-content p {
+  font-size: 0.9rem; /* Reduce el tamaño del texto descriptivo */
 }

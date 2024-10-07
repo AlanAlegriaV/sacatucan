@@ -1,34 +1,47 @@
-  /* Diseño superior con colores verde y cian */
-  .top-design {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
-      clip-path: ellipse(70% 80% at 50% 0%);
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-  }
+ /* Fondo del toolbar personalizado */
+ .custom-toolbar {
+     --background: transparent;
+     height: 60px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     color: #333;
+     font-weight: bold;
+     font-size: 24px;
+ }
 
-  /* Estilo para ajustar el contenido hacia abajo */
-  ion-content {
-      --background: #ffffff;
-      /* Fondo blanco */
-      padding-top: 10px;
-      /* Ajusta este valor para mover el contenido hacia abajo */
-  }
 
-  ion-list {
-      margin-top: 10px;
-      /* Ajustar el margen superior de los mensajes */
-  }
+ /* Diseño superior con colores verde y cian */
+ .top-design {
+     width: 100%;
+     height: 200px;
+     background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+     clip-path: ellipse(70% 80% at 50% 0%);
+     position: absolute;
+     top: 0;
+     left: 0;
+     z-index: -1;
+ }
 
-  /* Estilo del logo */
-  .logo {
-      width: 200px;
-      /* Tamaño del logo */
-      height: auto;
-      display: block;
-      margin: 20px auto 10px;
-      /* Ajustar el espacio superior e inferior */
-  }
+ /* Estilo para ajustar el contenido hacia abajo */
+ ion-content {
+     --background: #ffffff;
+     /* Fondo blanco */
+     padding-top: 10px;
+     /* Ajusta este valor para mover el contenido hacia abajo */
+ }
+
+ ion-list {
+     margin-top: 10px;
+     /* Ajustar el margen superior de los mensajes */
+ }
+
+ /* Estilo del logo */
+ .logo {
+     width: 200px;
+     /* Tamaño del logo */
+     height: auto;
+     display: block;
+     margin: 20px auto 10px;
+     /* Ajustar el espacio superior e inferior */
+ }

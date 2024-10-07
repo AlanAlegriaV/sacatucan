@@ -1,10 +1,33 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>Publicacion de Paseador</ion-title>
   </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
+</ion-header>
+
+<ion-content>
   <div class="top-design"></div>
-  
-  </ion-content>
+
+  <!-- Logo -->
+  <ion-row class="ion-justify-content-center">
+    <img src="assets/logo.png" alt="Sacatucan Logo" class="logo" />
+  </ion-row>
+
+  <div *ngIf="mostrarPaseadores">
+    <ion-card *ngFor="let paseador of misPaseadores">
+      <img [src]="paseador.imagen" alt="{{ paseador.nombre }}">
+      <ion-card-header>
+        <ion-card-title>{{ paseador.nombre }} {{ paseador.apellido }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ paseador.descripcion }}</p>
+      </ion-card-content>
+
+      <ion-button expand="full" color="secondary" (click)="editarPaseador(paseador)">Editar Paseador</ion-button>
+      <ion-button expand="full" color="danger" (click)="eliminarPaseador()">Eliminar Paseador</ion-button>
+    </ion-card>
+  </div>
+
+</ion-content>

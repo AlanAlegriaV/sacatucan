@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
-import { PublicarModalPage } from '../publicar-modal/publicar-modal.page'; // Modal para editar paseador
-import { MascotasModalEditPage } from '../mascotas-modal-edit/mascotas-modal-edit.page'; // Modal para editar mascota
+
+
 
 @Component({
   selector: 'app-perfil',
@@ -11,13 +9,8 @@ import { MascotasModalEditPage } from '../mascotas-modal-edit/mascotas-modal-edi
 })
 export class PerfilPage {
   usuario: any = {};  // Información del usuario logueado
-  misPaseadores: any[] = [];  // Publicaciones del usuario como paseador
-  misMascotas: any[] = [];  // Publicaciones del usuario como mascotas
-  mostrarPaseadores: boolean = false;
-  mostrarMascotas: boolean = false;
   cambiarComuna: boolean = false;
   cambiarPassword: boolean = false;
-  mostrarMensajes: boolean = false; // Control para mostrar/ocultar los mensajes
 
   regionTemporal: string = '';
   comunaTemporal: string = '';
@@ -28,7 +21,7 @@ export class PerfilPage {
   nuevaPassword: string = '';
   repetirPassword: string = '';
 
-  constructor(private router: Router, private modalCtrl: ModalController) {}
+  constructor() {}
 
   ionViewWillEnter() {
     this.cargarDatosUsuario();  // Cargar datos del usuario al entrar en la vista
@@ -52,68 +45,6 @@ export class PerfilPage {
           comuna: usuarioLogueado.comuna
         };
       }
-    }
-  }
-
-  togglePaseadores() {
-    this.mostrarPaseadores = !this.mostrarPaseadores;
-    if (this.mostrarPaseadores) {
-      this.verMisPaseadores();
-    }
-  }
-
-  toggleMascotas() {
-    this.mostrarMascotas = !this.mostrarMascotas;
-    if (this.mostrarMascotas) {
-      this.verMisMascotas();
-    }
-  }
-
-  verMisPaseadores() {
-    const correoLogueado = localStorage.getItem('correoLogueado');
-    const paseadores: any[] = JSON.parse(localStorage.getItem('paseadores') || '[]');
-    this.misPaseadores = paseadores.filter((paseador: any) => paseador.correo === correoLogueado);
-  }
-
-  verMisMascotas() {
-    const correoLogueado = localStorage.getItem('correoLogueado');
-    const mascotas: any[] = JSON.parse(localStorage.getItem('mascotas') || '[]');
-    this.misMascotas = mascotas.filter((mascota: any) => mascota.correo === correoLogueado);
-  }
-
-  async editarPaseador(paseador: any) {
-    const modal = await this.modalCtrl.create({
-      component: PublicarModalPage,
-      componentProps: { paseador }
-    });
-    modal.onDidDismiss().then(() => this.verMisPaseadores());
-    return await modal.present();
-  }
-
-  async editarMascota(mascota: any) {
-    const modal = await this.modalCtrl.create({
-      component: MascotasModalEditPage,
-      componentProps: { mascota }
-    });
-    modal.onDidDismiss().then(() => this.verMisMascotas());
-    return await modal.present();
-  }
-
-  eliminarPaseador() {
-    if (confirm('¿Estás seguro de eliminar tu publicación como paseador?')) {
-      const paseadores = JSON.parse(localStorage.getItem('paseadores') || '[]');
-      const nuevosPaseadores = paseadores.filter((p: any) => p.correo !== this.usuario.correo);
-      localStorage.setItem('paseadores', JSON.stringify(nuevosPaseadores));
-      this.verMisPaseadores();
-    }
-  }
-
-  eliminarMascota(mascota: any) {
-    if (confirm(`¿Estás seguro de eliminar la publicación de la mascota ${mascota.nombre}?`)) {
-      const mascotas = JSON.parse(localStorage.getItem('mascotas') || '[]');
-      const nuevasMascotas = mascotas.filter((m: any) => !(m.correo === mascota.correo && m.nombre === mascota.nombre));
-      localStorage.setItem('mascotas', JSON.stringify(nuevasMascotas));
-      this.verMisMascotas();
     }
   }
 
