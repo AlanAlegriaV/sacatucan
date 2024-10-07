@@ -4,6 +4,13 @@ ion-footer {
     width: 100%;
   }
   
+  ion-button {
+    --border-radius: 20px; /* Bordes redondeados */
+    height: 50px;
+    min-width: 130px; /* Ancho mínimo para los botones */
+    font-size: 16px;
+  }
+  
   .cerrar-sesion-boton {
     --background: #3b82f6;  /* Color azul para el fondo */
     border-radius: 20px;

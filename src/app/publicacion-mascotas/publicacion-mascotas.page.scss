@@ -1,0 +1,19 @@
+  /* Fondo blanco para el contenido */
+  ion-content {
+    --background: #ffffff;
+    /* Establece el fondo de la página a blanco */
+    margin-top: 150px;
+    /* Ajusta esto dependiendo de la altura del diseño superior */
+}
+
+/* Diseño superior con colores verde y cian */
+.top-design {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+    clip-path: ellipse(70% 80% at 50% 0%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}

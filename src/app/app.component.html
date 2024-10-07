@@ -5,7 +5,20 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content></ion-content>
+  <ion-content>
+    <ion-button expand="full" color="primary" (click)="goToMensajes()" lines="none">
+      <ion-label>Ver Mensajes</ion-label>
+    </ion-button>
+
+    <ion-button expand="full" color="primary" (click)="goToPublicacionPaseador()" lines="none"> 
+      <ion-label>Publicacion de Paseador</ion-label>
+    </ion-button>
+    
+    <ion-button expand="full" color="primary" (click)="goToPublicacionMascotas()" lines="none">
+      <ion-label>Mascotas</ion-label>
+    </ion-button>
+  </ion-content>
+
   <ion-footer>
     <ion-button expand="full" color="primary" (click)="cerrarSesion()" class="cerrar-sesion-boton">
       Cerrar Sesión

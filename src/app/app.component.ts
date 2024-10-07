@@ -19,6 +19,29 @@ export class AppComponent {
       }
     });
   }
+  
+  goToMensajes() {
+    // Cerrar el side menu antes de redirigir
+    this.menuCtrl.close().then(() => {
+      this.router.navigate(['/mensaje']);
+    });
+  }
+
+  goToPublicacionPaseador() {
+    // Cerrar el side menu antes de redirigir
+    this.menuCtrl.close().then(() => {
+      this.router.navigate(['/publicacion-paseador']);
+    });
+  }
+
+  goToPublicacionMascotas() {
+    // Cerrar el side menu antes de redirigir
+    this.menuCtrl.close().then(() => {
+      this.router.navigate(['/publicacion-mascotas']);
+    });
+  }
+
+
 
   ngOnInit() {
     this.verificarAutenticacion();  // Verificar la autenticación al iniciar la aplicación

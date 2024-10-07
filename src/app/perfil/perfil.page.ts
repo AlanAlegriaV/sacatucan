@@ -28,8 +28,6 @@ export class PerfilPage {
   nuevaPassword: string = '';
   repetirPassword: string = '';
 
-  mensajesRecibidos: any[] = []; // Mensajes recibidos
-
   constructor(private router: Router, private modalCtrl: ModalController) {}
 
   ionViewWillEnter() {
@@ -234,15 +232,4 @@ export class PerfilPage {
     ];
   }
 
-  toggleMensajes() {
-    this.mostrarMensajes = !this.mostrarMensajes;
-    if (this.mostrarMensajes) {
-      this.verMensajes();
-    }
-  }
-
-  verMensajes() {
-    const correoLogueado = localStorage.getItem('correoLogueado');
-    this.mensajesRecibidos = JSON.parse(localStorage.getItem(`mensajes_${correoLogueado}`) || '[]');
-  }
 }

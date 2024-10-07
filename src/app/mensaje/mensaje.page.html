@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mensajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="top-design"></div>
+
+  <!-- Logo -->
+  <ion-row class="ion-justify-content-center">
+    <img src="assets/logo.png" alt="Sacatucan Logo" class="logo" />
+  </ion-row>
+
+  <!-- Mostrar Mensajes automáticamente -->
+  <ion-list>
+    <ion-item *ngFor="let mensaje of mensajesRecibidos">
+      <ion-label>
+        <h3>{{ mensaje.nombre }} {{ mensaje.apellido }}</h3>
+        <p>{{ mensaje.correo }}</p>
+        <p>{{ mensaje.telefono }}</p>
+        <p>{{ mensaje.texto }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

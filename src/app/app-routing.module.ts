@@ -55,6 +55,20 @@ const routes: Routes = [
     path: 'detalle-mascota',
     loadChildren: () => import('./detalle-mascota/detalle-mascota.module').then( m => m.DetalleMascotaPageModule)
   },
+  {
+    path: 'mensaje',
+    loadChildren: () => import('./mensaje/mensaje.module').then( m => m.MensajePageModule)
+  },
+  {
+    path: 'publicacion-paseador',
+    loadChildren: () => import('./publicacion-paseador/publicacion-paseador.module').then( m => m.PublicacionPaseadorPageModule)
+  },
+  {
+    path: 'publicacion-mascotas',
+    loadChildren: () => import('./publicacion-mascotas/publicacion-mascotas.module').then( m => m.PublicacionMascotasPageModule)
+  },
+
+
 ];
 
 @NgModule({
