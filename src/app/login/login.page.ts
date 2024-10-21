@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'; // Para la autenticación
 
 @Component({
   selector: 'app-login',
@@ -13,9 +15,10 @@ export class LoginPage {
     password: ''
   };
 
+
   error: string = ''; // Variable para almacenar el mensaje de error
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private afAuth: AngularFireAuth) { }
 
   ionViewWillEnter() {
     // Limpiar los datos del formulario cuando se accede a la página de login
@@ -27,30 +30,22 @@ export class LoginPage {
     this.router.navigate(['/registro']);  // Asegúrate de que la ruta '/registro' esté configurada
   }
 
+  async iniciarSesion() {
+    try {
+      // Intentamos iniciar sesión con Firebase Authentication
+      const userCredential = await this.afAuth.signInWithEmailAndPassword(this.usuario.correo, this.usuario.password);
 
-  iniciarSesion() {
-    // Obtener los usuarios almacenados en localStorage
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-
-    // Buscar el usuario por correo y contraseña
-    const usuarioValido = usuarios.find((user: any) => 
-      user.correo === this.usuario.correo && user.password === this.usuario.password
-    );
-
-    // Depuración: Comparar contraseñas en consola
-    console.log("Contraseña almacenada:", usuarioValido ? usuarioValido.password : 'No encontrada');
-    console.log("Contraseña ingresada:", this.usuario.password);
-
-    if (usuarioValido) {
-      // Si el usuario es válido, limpiar el error y redirigir a la página principal
+      // Si el inicio de sesión es exitoso
+      console.log("Inicio de sesión exitoso:", userCredential.user);
       this.error = '';  
       alert('Inicio de sesión exitoso');
-      // Guardar el correo del usuario logueado en localStorage
-      localStorage.setItem('correoLogueado', usuarioValido.correo);
+      
       // Redirigir a la página principal
       this.router.navigate(['/mainpage']);
-    } else {
-      // Si no coincide, mostrar mensaje de error
+      
+    } catch (error) {
+      // Manejo de errores
+      console.error("Error al iniciar sesión:", error);
       this.error = 'Correo o contraseña incorrectos. Intenta nuevamente.';
     }
   }

@@ -3,6 +3,7 @@ export const environment = {
   firebaseConfig: {
     apiKey: "AIzaSyDe7x45_Fy4fel2QZQkTdWaVAZgNaULrxM",
     authDomain: "sacatucan.firebaseapp.com",
+    databaseURL: "https://sacatucan-default-rtdb.firebaseio.com",
     projectId: "sacatucan",
     storageBucket: "sacatucan.appspot.com",
     messagingSenderId: "162901916057",
