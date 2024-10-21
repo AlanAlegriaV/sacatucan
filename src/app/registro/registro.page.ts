@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Para crear usuarios en Firebase
-import { AngularFirestore } from '@angular/fire/compat/firestore'; // Importamos Firestore para almacenar datos adicionales
-
 
 @Component({
   selector: 'app-registro',
@@ -28,7 +26,7 @@ export class RegistroPage implements OnInit {
   error: string = ''; // Variable para almacenar mensajes de error
 
 
-  constructor(private router: Router, private afAuth: AngularFireAuth, private firestore: AngularFirestore) { }
+  constructor(private router: Router, private afAuth: AngularFireAuth ) { }
 
   ngOnInit() {
     // Definir las regiones y sus comunas directamente en el código
@@ -123,25 +121,15 @@ export class RegistroPage implements OnInit {
       alert('Las contraseñas no coinciden.');
       return;
     }
-
+    
     try {
       // Registrar al usuario en Firebase Authentication
       const userCredential = await this.afAuth.createUserWithEmailAndPassword(this.usuario.correo, this.usuario.password);
       const uid = userCredential.user?.uid;
-      console.log('UID del usuario:', uid);
-
-
-      // Si el registro fue exitoso, guardar los demás datos del usuario en Firestore
+      
+      // Si el registro es exitoso, muestra el UID en la consola (opcional)
       if (uid) {
-        await this.firestore.collection('usuarios').doc(uid).set({
-          correo: this.usuario.correo || '',         // Guardar correo electrónico
-          nombre: this.usuario.nombre || '',         // Guardar nombre del usuario
-          apellido: this.usuario.apellido || '',     // Guardar apellido
-          telefono: this.usuario.telefono || '',     // Guardar número de teléfono
-          region: this.usuario.region || '',         // Guardar la región seleccionada
-          comuna: this.usuario.comuna || '',         // Guardar la comuna seleccionada
-          // NOTA: No se debe guardar la contraseña o repetir contraseña por razones de seguridad.
-        });
+        console.log('UID del usuario:', uid);
       }
 
       alert('Registro exitoso.');
