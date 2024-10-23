@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-
-
+import { AngularFireAuth } from '@angular/fire/compat/auth'; // Para obtener el UID del usuario logueado
+import { AngularFireDatabase } from '@angular/fire/compat/database'; // Para interactuar con Realtime Database
+import firebase from 'firebase/compat/app';  // Necesario para acceder a firebase.auth
 
 @Component({
   selector: 'app-perfil',
@@ -21,32 +22,42 @@ export class PerfilPage {
   nuevaPassword: string = '';
   repetirPassword: string = '';
 
-  constructor() {}
+  constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase,) { }
 
   ionViewWillEnter() {
     this.cargarDatosUsuario();  // Cargar datos del usuario al entrar en la vista
     this.cargarRegiones();  // Cargar las regiones y comunas disponibles
   }
 
-  cargarDatosUsuario() {
-    const correoLogueado = localStorage.getItem('correoLogueado'); // Obtener el correo del usuario logueado
+  async cargarDatosUsuario() {
+    const user = await this.afAuth.currentUser; // Obtener el usuario actual logueado
+    const uid = user?.uid;  // Obtener el UID del usuario
 
-    if (correoLogueado) {
-      const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-      const usuarioLogueado = usuarios.find((user: any) => user.correo === correoLogueado);
-
-      if (usuarioLogueado) {
-        this.usuario = {
-          nombre: usuarioLogueado.nombre,
-          apellido: usuarioLogueado.apellido,
-          correo: usuarioLogueado.correo,
-          telefono: usuarioLogueado.telefono,
-          region: usuarioLogueado.region,
-          comuna: usuarioLogueado.comuna
-        };
-      }
+    if (uid) {
+      // Acceder a los datos en Realtime Database utilizando el UID
+      const usuarioRef = this.db.object(`usuarios/${uid}`);
+      usuarioRef.valueChanges().subscribe((data: any) => {
+        if (data) {
+          // Asignar los datos obtenidos a la variable 'usuario'
+          this.usuario = {
+            nombre: data.nombre,
+            apellido: data.apellido,
+            correo: data.correo,
+            telefono: data.telefono,
+            region: data.region,
+            comuna: data.comuna
+          };
+        } else {
+          console.log('No se encontraron datos para este usuario.');
+        }
+      }, error => {
+        console.error('Error al obtener los datos del usuario:', error);
+      });
+    } else {
+      console.log('No se pudo obtener el UID del usuario.');
     }
   }
+
 
   mostrarCambioComuna() {
     this.cambiarComuna = true;
@@ -63,14 +74,35 @@ export class PerfilPage {
     }
   }
 
-  guardarComuna() {
-    this.usuario.region = this.regionTemporal;
-    this.usuario.comuna = this.comunaTemporal;
-    localStorage.setItem('usuarioActual', JSON.stringify(this.usuario));
-    this.cambiarComuna = false;
+  async guardarComuna() {
+    const user = await this.afAuth.currentUser; // Obtener el usuario actual logueado
+    const uid = user?.uid;  // Obtener el UID del usuario
+
+    if (uid) {  // Actualizar la región y comuna en Realtime Database
+      this.usuario.region = this.regionTemporal;
+      this.usuario.comuna = this.comunaTemporal;
+
+      const usuarioRef = this.db.object(`usuarios/${uid}`); // Referencia al usuario en la base de datos
+
+      // Actualizar en la base de datos
+      usuarioRef.update({
+        region: this.usuario.region,
+        comuna: this.usuario.comuna
+      }).then(() => {
+        console.log('Región y comuna actualizadas correctamente en Realtime Database');
+        this.cambiarComuna = false; // Ocultar el campo de cambio de comuna
+      }).catch(error => {
+        console.error('Error al actualizar la región y comuna:', error);
+      });
+    } else {
+      console.error('No se pudo obtener el UID del usuario.');
+    }
   }
 
   mostrarCambioPassword() {
+    this.passwordActual = '';
+    this.nuevaPassword = '';
+    this.repetirPassword = '';
     this.cambiarPassword = true;
   }
 
@@ -78,20 +110,75 @@ export class PerfilPage {
     this.cambiarPassword = false;
   }
 
-  guardarPassword() {
-    if (this.nuevaPassword === this.repetirPassword) {
-      this.usuario.password = this.nuevaPassword;
-      localStorage.setItem('usuarioActual', JSON.stringify(this.usuario));
-      this.cambiarPassword = false;
-    } else {
-      alert('Las contraseñas no coinciden');
+  async guardarPassword() {
+    try {
+      const user = await this.afAuth.currentUser; // Obtener el usuario actual logueado
+      const uid = user?.uid;  // Obtener el UID del usuario logueado
+  
+      if (!user) {
+        alert('No se pudo obtener el usuario actual. Inicia sesión nuevamente.');
+        return;
+      }
+  
+      // Verificar que las nuevas contraseñas coincidan
+      if (this.nuevaPassword !== this.repetirPassword) {
+        alert('La nueva contraseña y la repetición no coinciden.');
+        return;
+      }
+  
+      // Reautenticar al usuario para validar la contraseña actual
+      const credentials = firebase.auth.EmailAuthProvider.credential(
+        user.email!,  // Email del usuario logueado
+        this.passwordActual // Contraseña actual ingresada por el usuario
+      );
+  
+      await user.reauthenticateWithCredential(credentials); // Reautenticación
+  
+      // Si la reautenticación fue exitosa, actualizar la contraseña
+      await user.updatePassword(this.nuevaPassword);
+  
+      alert('Contraseña actualizada correctamente.');
+      this.cambiarPassword = false; // Ocultar los botones de aceptar y cancelar después de actualizar
+  
+    } catch (error: any) {
+      // Verificar si el error es de tipo `auth/wrong-password` o `auth/invalid-credential`
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        // Si la contraseña actual no es correcta
+        alert('La contraseña actual no es correcta.');
+      } else if (error.code === 'auth/requires-recent-login') {
+        // Si es necesario reautenticar al usuario
+        alert('Por razones de seguridad, por favor vuelve a iniciar sesión.');
+      } else {
+        // Manejar otros errores generales
+        console.error('Error al actualizar la contraseña:', error);
+        alert('Error al actualizar la contraseña. Inténtalo de nuevo.');
+      }
     }
   }
 
-  guardarCambios() {
-    localStorage.setItem('usuarioActual', JSON.stringify(this.usuario));
-    alert('Cambios guardados correctamente.');
+  async guardarCambios() {
+    try {
+      const user = await this.afAuth.currentUser; // Obtener el usuario actual logueado
+      const uid = user?.uid; // Obtener el UID del usuario logueado
+  
+      // Referencia al usuario en la base de datos
+      const usuarioRef = this.db.object(`usuarios/${uid}`);
+  
+      // Actualizar los datos del usuario en Realtime Database
+      await usuarioRef.update({
+        nombre: this.usuario.nombre || '',        // Actualizar nombre
+        apellido: this.usuario.apellido || '',    // Actualizar apellido
+        telefono: this.usuario.telefono || '',    // Actualizar teléfono
+      });
+  
+      // Mostrar alerta de éxito
+      alert('Cambios guardados correctamente.');
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error);
+      alert('Hubo un error al guardar los cambios. Inténtalo de nuevo.');
+    }
   }
+  
 
   cargarRegiones() {
     this.regiones = [
@@ -159,7 +246,7 @@ export class PerfilPage {
         region: "Región Metropolitana de Santiago",
         comunas: ["Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "Santiago", "San Joaquín", "San Miguel", "San Ramón", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil", "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"]
       }
-      
+
     ];
   }
 

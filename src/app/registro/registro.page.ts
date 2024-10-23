@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Para crear usuarios en Firebase
+import { AngularFireDatabase } from '@angular/fire/compat/database'; // Importamos AngularFireDatabase para Realtime Database
 
 @Component({
   selector: 'app-registro',
@@ -26,7 +27,7 @@ export class RegistroPage implements OnInit {
   error: string = ''; // Variable para almacenar mensajes de error
 
 
-  constructor(private router: Router, private afAuth: AngularFireAuth ) { }
+  constructor(private router: Router, private afAuth: AngularFireAuth, private db: AngularFireDatabase ) { }
 
   ngOnInit() {
     // Definir las regiones y sus comunas directamente en el código
@@ -130,6 +131,18 @@ export class RegistroPage implements OnInit {
       // Si el registro es exitoso, muestra el UID en la consola (opcional)
       if (uid) {
         console.log('UID del usuario:', uid);
+      }
+
+      if (uid) {
+        await this.db.object(`usuarios/${uid}`).set({
+          nombre: this.usuario.nombre,
+          apellido: this.usuario.apellido,
+          telefono: this.usuario.telefono,
+          region: this.usuario.region,
+          comuna: this.usuario.comuna,
+          correo: this.usuario.correo
+        });
+        console.log('Datos guardados en Realtime Database.');
       }
 
       alert('Registro exitoso.');
