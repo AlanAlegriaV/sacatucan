@@ -90,7 +90,7 @@ export class PublicarModalPage implements OnInit {
   guardarPaseador() {
     if (this.imagenBase64) {
       this.uploadInProgress = true;  // Indicar que la subida está en progreso
-      const filePath = `paseadores/${this.usuario.uid}/${uuidv4()}`;  // Guardar la imagen bajo el UID del usuario y un ID único
+      const filePath = `paseadores/$${uuidv4()}`;  // Guardar la imagen bajo el UID del usuario y un ID único
       const fileRef = this.storage.ref(filePath);  // Referencia al archivo en Firebase Storage
       const task = fileRef.putString(this.imagenBase64, 'data_url');  // Subir la imagen en base64
 
