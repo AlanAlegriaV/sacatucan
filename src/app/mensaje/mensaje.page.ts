@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular'
 import { ActivatedRoute } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';  // Para Firebase Authentication
+import { AngularFireDatabase } from '@angular/fire/compat/database'; // Para Firebase Realtime Database
+import { Subscription } from 'rxjs';  // Para manejar las suscripciones a Firebase
 
 @Component({
   selector: 'app-mensaje',
@@ -10,37 +13,51 @@ import { ActivatedRoute } from '@angular/router';
 export class MensajePage {
   usuario: any = {};  // Información del usuario logueado
   mensajesRecibidos: any[] = []; // Mensajes recibidos
-
-  constructor(private route: ActivatedRoute, private navCtrl: NavController) {}
+  firebaseSub: Subscription| undefined;  // Suscripción a Firebase
+  
+  constructor(private route: ActivatedRoute, private navCtrl: NavController, private afAuth: AngularFireAuth, private db: AngularFireDatabase ) {}
 
   ionViewWillEnter() {
     this.cargarDatosUsuario();  // Cargar datos del usuario al entrar en la vista
-    this.verMensajes();  // Mostrar los mensajes automáticamente al cargar la página
   }
 
   cargarDatosUsuario() {
-    const correoLogueado = localStorage.getItem('correoLogueado'); // Obtener el correo del usuario logueado
-
-    if (correoLogueado) {
-      const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-      const usuarioLogueado = usuarios.find((user: any) => user.correo === correoLogueado);
-
-      if (usuarioLogueado) {
+    // Obtener el estado de autenticación actual
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        // Si el usuario está autenticado, obtener su información
+        const uid = user.uid;
         this.usuario = {
-          nombre: usuarioLogueado.nombre,
-          apellido: usuarioLogueado.apellido,
-          correo: usuarioLogueado.correo,
-          telefono: usuarioLogueado.telefono,
-          region: usuarioLogueado.region,
-          comuna: usuarioLogueado.comuna
+          correo: user.email,  // Correo del usuario logueado desde Firebase Auth
+          uid: uid  // UID del usuario
         };
+
+        // Cargar los mensajes del usuario desde Firebase
+        this.verMensajes(uid);
+      } else {
+        console.error('No hay usuario autenticado.');
       }
-    }
+    });
   }
 
-  verMensajes() {
-    const correoLogueado = localStorage.getItem('correoLogueado');
-    this.mensajesRecibidos = JSON.parse(localStorage.getItem(`mensajes_${correoLogueado}`) || '[]');
+  verMensajes(uid: string) {
+    // Suscribirse al nodo de mensajes del usuario en Realtime Database
+    this.firebaseSub = this.db.list(`mensajes/${uid}`).valueChanges().subscribe(mensajes => {
+      if (mensajes && mensajes.length > 0) {
+        this.mensajesRecibidos = mensajes;  // Asignar los mensajes recibidos
+      } else {
+        this.mensajesRecibidos = [];  // No hay mensajes, asignar un arreglo vacío
+      }
+    }, error => {
+      console.error('Error al cargar los mensajes desde Firebase:', error);
+    });
+  }
+
+  ionViewWillLeave() {
+    // Cancelar la suscripción a Firebase cuando se abandona la página
+    if (this.firebaseSub) {
+      this.firebaseSub.unsubscribe();
+    }
   }
 
     // Método para regresar a la página anterior

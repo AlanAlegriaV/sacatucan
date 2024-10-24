@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Para crear usuarios en Firebase
 import { AngularFireDatabase } from '@angular/fire/compat/database'; // Importamos AngularFireDatabase para Realtime Database
 
 @Component({
@@ -127,11 +126,6 @@ export class RegistroPage implements OnInit {
       // Registrar al usuario en Firebase Authentication
       const userCredential = await this.afAuth.createUserWithEmailAndPassword(this.usuario.correo, this.usuario.password);
       const uid = userCredential.user?.uid;
-      
-      // Si el registro es exitoso, muestra el UID en la consola (opcional)
-      if (uid) {
-        console.log('UID del usuario:', uid);
-      }
 
       if (uid) {
         await this.db.object(`usuarios/${uid}`).set({
@@ -142,7 +136,6 @@ export class RegistroPage implements OnInit {
           comuna: this.usuario.comuna,
           correo: this.usuario.correo
         });
-        console.log('Datos guardados en Realtime Database.');
       }
 
       alert('Registro exitoso.');

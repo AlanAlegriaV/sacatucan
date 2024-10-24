@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth'; // Para obtener el UID del usuario logueado
 import { AngularFireDatabase } from '@angular/fire/compat/database'; // Para interactuar con Realtime Database
-import firebase from 'firebase/compat/app';  // Necesario para acceder a firebase.auth
+import  firebase  from 'firebase/compat/app';  // Necesario para acceder a firebase.auth
 
 @Component({
   selector: 'app-perfil',

@@ -19,7 +19,7 @@
   
   <div *ngIf="mostrarMascotas">
     <ion-card *ngFor="let mascota of misMascotas">
-      <img [src]="mascota.imagen" alt="{{ mascota.nombre }}">
+      <img [src]="mascota.imagenUrl" alt="{{ mascota.nombre }}" loading="lazy">
       <ion-card-header>
         <ion-card-title>{{ mascota.nombre }}</ion-card-title>
       </ion-card-header>

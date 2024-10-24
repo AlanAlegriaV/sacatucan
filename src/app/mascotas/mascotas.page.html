@@ -9,7 +9,7 @@
   <!-- Mostrar las mascotas publicadas -->
   <div class="mascota-grid">
     <ion-card *ngFor="let mascota of mascotas" (click)="verDetallesMascota(mascota)">
-      <img [src]="mascota.imagen" alt="{{ mascota.nombre }}">
+      <img [src]="mascota.imagenUrl" alt="{{ mascota.nombre }}" loading="lazy">
       <ion-card-header>
         <ion-card-title>{{ mascota.nombre }}</ion-card-title>
         <ion-card-subtitle>{{ mascota.edad }} años, {{ mascota.sexo }}</ion-card-subtitle>

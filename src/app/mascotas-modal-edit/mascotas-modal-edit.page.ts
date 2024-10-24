@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Asegúrate de tener esto
 import { ModalController, NavParams } from '@ionic/angular';
+import { AngularFireDatabase } from '@angular/fire/compat/database'; // Importamos AngularFireDatabase para Realtime Database
+import { AngularFireAuth } from '@angular/fire/compat/auth'; // Para obtener el UID del usuario actual
 
 @Component({
   selector: 'app-mascotas-modal-edit',
@@ -15,7 +17,9 @@ export class MascotasModalEditPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private modalController: ModalController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private db: AngularFireDatabase,
+    private afAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
@@ -25,11 +29,11 @@ export class MascotasModalEditPage implements OnInit {
       edad: [this.mascota.edad, Validators.required],
       sexo: [this.mascota.sexo, Validators.required],
       descripcion: [this.mascota.descripcion, Validators.required],
-      imagen: [this.mascota.imagen || ''] // Cargar la imagen existente si la hay
+      imagen: [this.mascota.imagenUrl || ''] // Cargar la imagen existente si la hay
     });
 
     // Cargar la imagen en la previsualización si ya existe
-    this.imagenPrevisualizacion = this.mascota.imagen;
+    this.imagenPrevisualizacion = this.mascota.imagenUrl;
   }
 
   onFileChange(event: any) {
@@ -46,21 +50,41 @@ export class MascotasModalEditPage implements OnInit {
     }
   }
 
-  guardarCambios() {
+  async guardarCambios() {
+    // Verificar si el formulario es válido
     if (this.mascotaForm.valid) {
-      const mascotas = JSON.parse(localStorage.getItem('mascotas') || '[]');
-      const indiceMascota = mascotas.findIndex((m: any) =>
-        m.nombre === this.mascota.nombre && m.correo === this.mascota.correo
-      );
-
-      if (indiceMascota !== -1) {
-        mascotas[indiceMascota] = this.mascotaForm.value;
-        mascotas[indiceMascota].correo = this.mascota.correo; // Mantener el correo sin cambios
-        localStorage.setItem('mascotas', JSON.stringify(mascotas));
-        this.modalController.dismiss({ actualizado: true });
+      // Obtenemos el UID del dueño de la mascota
+      const user = await this.afAuth.currentUser;
+      const uid = user?.uid; // Obtener el UID del usuario actual
+  
+      if (!uid) {
+        console.error('Error: No se pudo obtener el UID del usuario.');
+        return;
       }
+  
+      // Asegurarse de que la mascota tenga un id (mascotaId) antes de actualizar
+      const mascotaId = this.mascota.mascotaId;  // Accedemos a la propiedad mascotaId de la mascota seleccionada
+      if (!mascotaId) {
+        console.error('Error: No se pudo obtener el ID de la mascota.');
+        return;
+      }
+  
+      // Actualizamos la información de la mascota en el nodo `mascotas/{uid}/{mascotaId}`
+      this.db.object(`mascotas/${uid}/${mascotaId}`)
+        .update(this.mascotaForm.value)  // Actualizamos los datos de la mascota
+        .then(() => {
+          alert('Mascota actualizada correctamente');
+          this.modalController.dismiss({ actualizado: true });  // Cerramos el modal y notificamos éxito
+        })
+        .catch((error) => {
+          console.error('Error al actualizar la mascota en Firebase:', error);
+          alert('Error al actualizar la mascota. Inténtalo de nuevo.');
+        });
+    } else {
+      console.error('El formulario no es válido.');
     }
   }
+  
 
   cancelar() {
     this.modalController.dismiss();

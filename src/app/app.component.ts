@@ -10,6 +10,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 
 export class AppComponent {
+  
   usuarioAutenticado: boolean = false;  // Variable para saber si hay un usuario autenticado
 
   constructor(private router: Router, private menuCtrl:  MenuController, private afAuth: AngularFireAuth) {
@@ -20,6 +21,7 @@ export class AppComponent {
       }
     });
   }
+
   
   goToMensajes() {
     // Cerrar el side menu antes de redirigir
@@ -56,7 +58,6 @@ export class AppComponent {
       this.router.navigate(['/login']);
     } catch (error) {
       console.log('Error al cerrar sesion', error);
-      throw error;
     }
   }
 }

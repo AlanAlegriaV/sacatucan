@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MascotasModalEditPage } from '../mascotas-modal-edit/mascotas-modal-edit.page'; // Modal para editar mascota
+import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
+import { AngularFireDatabase } from '@angular/fire/compat/database'; // Importamos AngularFireDatabase para Realtime Database
 
 @Component({
   selector: 'app-publicacion-mascotas',
@@ -13,37 +15,30 @@ export class PublicacionMascotasPage {
   misMascotas: any[] = [];  // Publicaciones del usuario como mascotas
   mostrarMascotas: boolean = true;
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private modalCtrl: ModalController, private afAuth: AngularFireAuth, private db: AngularFireDatabase) {  }
 
   ionViewWillEnter() {
-    this.cargarDatosUsuario();  // Cargar datos del usuario al entrar en la vista
     this.verMisMascotas();  // Cargar automáticamente las mascotas
   }
 
-  cargarDatosUsuario() {
-    const correoLogueado = localStorage.getItem('correoLogueado'); // Obtener el correo del usuario logueado
-
-    if (correoLogueado) {
-      const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-      const usuarioLogueado = usuarios.find((user: any) => user.correo === correoLogueado);
-
-      if (usuarioLogueado) {
-        this.usuario = {
-          nombre: usuarioLogueado.nombre,
-          apellido: usuarioLogueado.apellido,
-          correo: usuarioLogueado.correo,
-          telefono: usuarioLogueado.telefono,
-          region: usuarioLogueado.region,
-          comuna: usuarioLogueado.comuna
-        };
-      }
-    }
-  }
-
   verMisMascotas() {
-    const correoLogueado = localStorage.getItem('correoLogueado');
-    const mascotas: any[] = JSON.parse(localStorage.getItem('mascotas') || '[]');
-    this.misMascotas = mascotas.filter((mascota: any) => mascota.correo === correoLogueado);
+    // Obtenemos el UID del usuario logueado
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        const uid = user.uid;  // Aquí obtenemos el UID del usuario logueado
+
+        // Accedemos al nodo de mascotas del usuario en Realtime Database
+        this.db.list(`mascotas/${uid}`).snapshotChanges().subscribe(snapshot => {
+          this.misMascotas = snapshot.map(action => {
+            const data = action.payload.val() as object || {};  // Asegurarnos de que `data` es un objeto
+            const mascotaId = action.key;  // Obtenemos el ID de la mascota
+            return { ...data, uid, mascotaId };  // Devolvemos el objeto con uid y mascotaId
+          });
+        });
+      } else {
+        console.error('No se pudo obtener el UID del usuario.');
+      }
+    });
   }
 
   async editarMascota(mascota: any) {
@@ -56,11 +51,27 @@ export class PublicacionMascotasPage {
   }
 
   eliminarMascota(mascota: any) {
-    if (confirm(`¿Estás seguro de eliminar la publicación de la mascota ${mascota.nombre}?`)) {
-      const mascotas = JSON.parse(localStorage.getItem('mascotas') || '[]');
-      const nuevasMascotas = mascotas.filter((m: any) => !(m.correo === mascota.correo && m.nombre === mascota.nombre));
-      localStorage.setItem('mascotas', JSON.stringify(nuevasMascotas));
-      this.verMisMascotas();
+    const uid = mascota.uid;  // UID del dueño de la mascota
+    const mascotaId = mascota.mascotaId;  // Identificador único de la mascota
+  
+    // Verificar que ambos valores estén presentes
+    if (!uid || !mascotaId) {
+      alert('No se pudo eliminar la mascota. Faltan datos de identificación.');
+      return;
     }
-  }
+    
+    if (confirm(`¿Estás seguro de eliminar la publicación de la mascota ${mascota.nombre}?`)) {
+      // Eliminar la mascota de Realtime Database
+      this.db.object(`mascotas/${uid}/${mascotaId}`).remove()
+        .then(() => {
+          alert(`La publicación de la mascota ${mascota.nombre} ha sido eliminada.`);
+          this.verMisMascotas();  // Actualiza la lista de mascotas
+        })
+        .catch((error) => {
+          console.error('Error al eliminar la mascota:', error);
+          alert('Ocurrió un error al intentar eliminar la mascota. Inténtalo de nuevo.');
+        });
+    }
+  }  
+  
 }

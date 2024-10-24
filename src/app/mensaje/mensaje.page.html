@@ -19,10 +19,11 @@
   <ion-list>
     <ion-item *ngFor="let mensaje of mensajesRecibidos">
       <ion-label>
-        <h3>{{ mensaje.nombre }} {{ mensaje.apellido }}</h3>
-        <p>{{ mensaje.correo }}</p>
-        <p>{{ mensaje.telefono }}</p>
+        <h3>{{ mensaje.nombreRemitente }} {{ mensaje.apellidoRemitente }}</h3>
+        <p>{{ mensaje.correoRemitente }}</p>
+        <p>{{ mensaje.telefonoRemitente }}</p>
         <p>{{ mensaje.texto }}</p>
+        <p>{{ mensaje.fechaEnvio}}</p>
       </ion-label>
     </ion-item>
   </ion-list>
