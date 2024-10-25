@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { PublicarModalPage } from '../publicar-modal/publicar-modal.page';  // Asegúrate de que el modal esté importado
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-paseadores',
@@ -12,19 +13,39 @@ export class PaseadoresPage implements OnInit {
 
   paseadores: any[] = [];
 
-  constructor( private navCtrl: NavController, private modalCtrl: ModalController, private db: AngularFireDatabase ) {}
+  constructor( private modalCtrl: ModalController,  private router: Router, private db: AngularFireDatabase ) {}
 
   ngOnInit() {
     this.cargarPaseadores();  // Se ejecuta automáticamente cuando se inicializa el componente
   }
 
-  // Método para cargar la lista de paseadores desde Firebase Realtime Database
   cargarPaseadores() {
-    // Referencia al nodo 'paseadores' en la base de datos
-    this.db.list('paseadores').valueChanges().subscribe((paseadores: any[]) => {
-      this.paseadores = paseadores;  // Asigna los datos recuperados a la variable 'paseadores'
-    }, (error) => {
-      console.error('Error al cargar paseadores desde Firebase:', error);
+    this.db.object('paseadores').snapshotChanges().subscribe(snapshot => {
+      const paseadoresCargados: any[] = [];
+  
+      const allPaseadores = snapshot.payload.val() as { [key: string]: any };  // Aseguramos que es un objeto
+  
+      // Verificamos que allPaseadores no sea nulo y que sea un objeto
+      if (allPaseadores && typeof allPaseadores === 'object') {
+        // Recorrer todos los paseadores
+        for (const ownerId in allPaseadores) {
+          if (allPaseadores.hasOwnProperty(ownerId)) {
+            const ownerPaseadores = allPaseadores[ownerId];
+  
+            // Recorrer todos los paseadores del dueño actual
+            for (const paseadorId in ownerPaseadores) {
+              if (ownerPaseadores.hasOwnProperty(paseadorId)) {
+                const paseador = ownerPaseadores[paseadorId];
+                paseador.uid = ownerId;  // UID del dueño del paseador
+                paseador.paseadorId = paseadorId;  // Agregar el ID del paseador
+                paseadoresCargados.push(paseador);  // Añadir el paseador a la lista
+              }
+            }
+          }
+        }
+      }
+  
+      this.paseadores = paseadoresCargados;  // Asignar todos los paseadores cargados al array de paseadores
     });
   }
 
@@ -34,12 +55,12 @@ export class PaseadoresPage implements OnInit {
     this.cargarPaseadores(); // Refrescar la lista de paseadores
   }
 
-  // Método para ver detalles de un paseador
-  verDetalle(paseador: any) {
-    this.navCtrl.navigateForward(`/detalle-paseador`, {
-      queryParams: { paseador: JSON.stringify(paseador) }
-    });
-  }
+// Ver detalles de un paseador
+async verDetalle(paseador: any) {
+  const paseadorString = JSON.stringify(paseador);
+  this.router.navigate(['/detalle-paseador'], { queryParams: { paseador: paseadorString } });
+}
+
 
   // Método para abrir el modal de publicar
   async publicarseComoPaseador() {

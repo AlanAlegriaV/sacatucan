@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/compat/auth';  // Importar AngularFireAuth para autenticación
+import { AngularFireDatabase } from '@angular/fire/compat/database';  // Importar AngularFireDatabase para Realtime Database
 
 @Component({
   selector: 'app-detalle-paseador',
@@ -12,44 +14,89 @@ export class DetallePaseadorPage implements OnInit {
   paseador: any;
   usuarioActual: any = {};  // Usuario logueado
 
-  constructor(private route: ActivatedRoute, private navCtrl: NavController) {}
+  constructor(private route: ActivatedRoute, private navCtrl: NavController, private db: AngularFireDatabase, private afAuth: AngularFireAuth ) { }
 
   ngOnInit() {
-    const correoLogueado = localStorage.getItem('correoLogueado') || '';
-    
-    // Buscar el usuario actual en la lista de usuarios guardados en localStorage
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    this.usuarioActual = usuarios.find((usuario: any) => usuario.correo === correoLogueado) || {};
-
+    // Obtener el usuario actual logueado de Firebase Authentication
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        const uid = user.uid;  // Obtener el UID del usuario logueado desde Firebase Auth
+  
+        if (uid) {
+          // Buscar los datos del usuario actual en Realtime Database usando el UID
+          this.db.object(`usuarios/${uid}`).valueChanges().subscribe(usuario => {
+            if (usuario) {
+              this.usuarioActual = usuario;  // Asignar los datos del usuario a usuarioActual
+            } else {
+              console.error('Usuario no encontrado en Realtime Database.');
+            }
+          }, error => {
+            console.error('Error al obtener los datos del usuario desde Firebase:', error);
+          });
+        }
+      }
+    });
+  
+    // Cargar los parámetros del paseador seleccionado desde los query params
     this.route.queryParams.subscribe(params => {
       if (params && params['paseador']) {
-        this.paseador = JSON.parse(params['paseador']);  // Usar corchetes para acceder a 'paseador'
+        this.paseador = JSON.parse(params['paseador']);  // Cargar el paseador seleccionado desde los parámetros de la ruta
       }
     });
   }
+  
 
   // Volver a la página anterior
   goBack() {
     this.navCtrl.back();
   }
 
-  // Verificar si la publicación es del usuario actual
+  // Verificar si la publicación es del usuario actual utilizando el UID
   esMiPublicacion() {
-    return this.paseador.correo === this.usuarioActual.correo;
+    // Compara el UID del paseador con el UID del usuario actual
+    return this.paseador.uid === this.usuarioActual.uid;
   }
 
-  // Método para contactar al paseador
-  contactar() {
-    const mensajes = JSON.parse(localStorage.getItem(`mensajes_${this.paseador.correo}`) || '[]');
-    const nuevoMensaje = {
-      texto: `Hola, necesito tus servicios como paseador.`,
-      nombre: this.usuarioActual.nombre,
-      apellido: this.usuarioActual.apellido,
-      correo: this.usuarioActual.correo,
-      telefono: this.usuarioActual.telefono
-    };
-    mensajes.push(nuevoMensaje);
-    localStorage.setItem(`mensajes_${this.paseador.correo}`, JSON.stringify(mensajes));
-    alert('Mensaje enviado exitosamente');
+
+  // Método para contactar al paseador y guardar el mensaje en Firebase
+async contactar() {
+  // Verificar si existe el UID del paseador
+  const uidDelPaseador = this.paseador.uid;  // UID del paseador
+  
+  if (!uidDelPaseador) {
+    alert('Error: no se pudo obtener la información del usuario o del paseador.');
+    return;
   }
+
+  // Formatear la fecha en "dd-mm-yyyy"
+  const fechaActual = new Date();
+  const dia = String(fechaActual.getDate()).padStart(2, '0');  // Añadir 0 delante si es necesario
+  const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');  // Los meses en JS son de 0-11
+  const año = fechaActual.getFullYear();
+  const fechaFormateada = `${dia}-${mes}-${año}`;  // Formato "dd-mm-yyyy"
+
+  // Definir el mensaje que se enviará
+  const nuevoMensaje = {
+    texto: `Hola, necesito tus servicios como paseador.`,  // Texto del mensaje
+    nombreRemitente: this.usuarioActual.nombre,  // Nombre del usuario que envía el mensaje
+    apellidoRemitente: this.usuarioActual.apellido,  // Apellido del usuario que envía el mensaje
+    correoRemitente: this.usuarioActual.correo,  // Correo del usuario que envía el mensaje
+    telefonoRemitente: this.usuarioActual.telefono,  // Teléfono del usuario que envía el mensaje
+    fechaEnvio: fechaFormateada  // Fecha y hora en que se envió el mensaje
+  };
+
+  // Generar un UUID único para el mensaje
+  const uuidMensaje = this.db.createPushId();
+
+  // Guardar el mensaje en el nodo `mensajes/{uidDelPaseador}/{uuidMensaje}` en Firebase Realtime Database
+  this.db.object(`mensajes/${uidDelPaseador}/${uuidMensaje}`).set(nuevoMensaje)
+    .then(() => {
+      alert('Mensaje enviado exitosamente');
+    })
+    .catch(error => {
+      console.error('Error al guardar el mensaje en Firebase:', error);
+      alert('Error al enviar el mensaje. Inténtalo de nuevo.');
+    });
+}
+
 }
