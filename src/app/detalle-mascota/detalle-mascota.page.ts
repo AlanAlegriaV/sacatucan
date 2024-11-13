@@ -13,6 +13,8 @@ export class DetalleMascotaPage implements OnInit {
 
   mascota: any; // Información de la mascota
   usuarioActual: any = {};  // Usuario logueado
+  esDueno: boolean = false;  // Bandera para saber si el usuario es el dueño de la mascota
+
   
   constructor(private route: ActivatedRoute, private navCtrl: NavController, private db: AngularFireDatabase, private afAuth: AngularFireAuth) { }
 
@@ -21,6 +23,7 @@ export class DetalleMascotaPage implements OnInit {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         const uid = user.uid;  // Obtener el UID del usuario logueado desde Firebase Auth
+        this.esDueno = user.uid === this.mascota.uid;
 
         if (uid) {
           // Buscar los datos del usuario actual en Realtime Database usando el UID

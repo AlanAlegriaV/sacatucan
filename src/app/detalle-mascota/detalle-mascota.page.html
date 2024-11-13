@@ -21,7 +21,7 @@
   </ion-card>
 
   <!-- Botón para contactar -->
-  <ion-button expand="full" color="primary" (click)="contactar()">
+  <ion-button *ngIf="!esDueno" expand="full" color="primary" (click)="contactar()">
     Enviar mensaje
   </ion-button>
 </ion-content>

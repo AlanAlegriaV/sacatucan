@@ -39,34 +39,41 @@ export class PublicarModalPage implements OnInit {
   }
 
   ngOnInit() {
-    // Obtener los datos del usuario logueado
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        this.usuario.uid = user.uid;  // Usar el UID del usuario logueado
-        this.usuario.correo = user.email;
-        
 
-        // Establecer el valor del campo de correo una vez que se obtiene el usuario
-        this.publicarForm.patchValue({
-          correo: this.usuario.correo
-        });
-
-        // Verificar si el paseador ya existe en Realtime Database bajo el UID del usuario
-        this.db.object(`paseadores/${this.usuario.uid}`).valueChanges()
-          .subscribe((paseador: any) => {
-            if (paseador) {
-              this.paseadorExistente = paseador;
-              this.publicarForm.patchValue({
-                nombre: paseador.nombre,
-                apellido: paseador.apellido,
-                descripcion: paseador.descripcion,
-                imagen: paseador.imagen
-              });
-            }
-          });
-      }
-    });
+    this.cargarUsuario();
   }
+
+  cargarUsuario(){
+        // Obtener los datos del usuario logueado
+        this.afAuth.authState.subscribe(user => {
+          if (user) {
+            this.usuario.uid = user.uid;  // Usar el UID del usuario logueado
+            this.usuario.correo = user.email;
+    
+    
+            // Establecer el valor del campo de correo una vez que se obtiene el usuario
+            this.publicarForm.patchValue({
+              correo: this.usuario.correo
+            });
+    
+            // Consultar los datos de nombre y apellido del usuario en Realtime Database
+            this.db.object(`usuarios/${this.usuario.uid}`).valueChanges()
+              .subscribe((usuarioData: any) => {
+                if (usuarioData) {
+                  this.usuario.nombre = usuarioData.nombre;
+                  this.usuario.apellido = usuarioData.apellido;
+    
+                  // Completar los campos de nombre y apellido en el formulario
+                  this.publicarForm.patchValue({
+                    nombre: this.usuario.nombre,
+                    apellido: this.usuario.apellido
+                  });
+                }
+              });
+          }
+        });
+  }
+
 
   // Método para cancelar y cerrar el modal
   cancelar() {
