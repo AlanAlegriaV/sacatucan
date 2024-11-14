@@ -4,6 +4,7 @@ import { PublicarModalPage } from '../publicar-modal/publicar-modal.page'; // Mo
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-publicacion-paseador',
@@ -28,10 +29,14 @@ export class PublicacionPaseadorPage {
         const uid = user.uid;
   
         // Cargamos nuevamente los paseadores desde la Realtime Database
-        this.db.list(`paseadores/${uid}`).valueChanges().subscribe((paseadores: any[]) => {
-          this.misPaseadores = paseadores; // Actualizamos la lista de paseadores
-          console.log('Publicaciones de paseadores actualizadas:', this.misPaseadores);
-        });
+        this.db.object(`paseadores/${uid}`).valueChanges().subscribe((paseador: any) => {
+          if (paseador) {
+            this.misPaseadores = [paseador];  // Coloca el objeto en un array para mantener la estructura
+            console.log('Publicación de paseador actualizada:', this.misPaseadores);
+          } else {
+            console.log('No se encontró ninguna publicación de paseador para este usuario.');
+          }
+        });        
       } 
     });
   }  
@@ -71,14 +76,13 @@ export class PublicacionPaseadorPage {
         const uid = user.uid;
   
         // Acceder directamente al nodo del paseador con el UID del usuario
-        this.db.list(`paseadores/${uid}`).valueChanges().subscribe((paseadores: any[]) => {
-          // Verificar si hay datos
-          if (paseadores && paseadores.length > 0) {
-            this.misPaseadores = paseadores;
-            console.log('Mis paseadores:', this.misPaseadores);  // Mostrar los paseadores en la consola
+        this.db.object(`paseadores/${uid}`).valueChanges().subscribe((paseador: any) => {
+          if (paseador) {
+            this.misPaseadores = [paseador];  // Almacena el paseador en un array para mantener la estructura
+            console.log('Mis paseadores:', this.misPaseadores);
           } else {
             console.log('No se encontró ninguna publicación de paseador para este usuario.');
-          }
+          } 
         }, error => {
           console.error('Error al obtener los paseadores:', error);
         });
@@ -103,45 +107,28 @@ export class PublicacionPaseadorPage {
           const uid = user.uid;
           console.log('UID del usuario logueado:', uid);
   
-          // Obtener los datos del paseador desde Firebase Realtime Database
-          this.db.object(`paseadores/${uid}`).valueChanges().subscribe((paseadores: any) => {
-            console.log('Datos del paseador recuperados:', paseadores);
-  
-            // Verificar si hay paseadores asociados al UID del usuario
-            if (paseadores) {
-              // Iterar sobre los paseadores para encontrar la imagen
-              const paseadorId = Object.keys(paseadores)[0]; // Obtenemos el primer ID de paseador (o puedes mejorar la lógica si hay múltiples paseadores)
-              const paseador = paseadores[paseadorId];
-  
-              if (paseador && paseador.imagen) {
-                const filePath = this.getFilePathFromUrl(paseador.imagen);
-                console.log('Ruta del archivo extraída:', filePath);
-  
-                // Eliminar la imagen del Storage
-                this.storage.ref(filePath).delete().subscribe(() => {
-                  // Eliminar los datos del paseador en la Realtime Database
-                  this.db.object(`paseadores/${uid}/${paseadorId}`).remove().then(() => {
-                    alert('Tu publicación como paseador ha sido eliminada correctamente.');
-                    this.loadPaseadorData();  // Método para cargar nuevamente las publicaciones
-                  }).catch(error => {
-                    console.error('Error al eliminar los datos del paseador:', error);
-                  });
-                }, error => {
-                  console.error('Error al eliminar la imagen del paseador en Firebase Storage:', error);
-                });
-              } else {
-                console.error('El paseador no tiene una imagen asociada.');
-              }
-            } else {
-              console.error('No se encontró la publicación como paseador.');
-            }
-          });
-        } else {
-          console.error('No se encontró un usuario logueado.');
-        }
-      });
-    }
+        // Desuscribimos cualquier suscripción previa en caso de que esté activa
+        this.db.object(`paseadores/${uid}`).valueChanges().pipe(take(1)).subscribe((paseador: any) => {
+          if (paseador && paseador.imagen) {
+            const filePath = this.getFilePathFromUrl(paseador.imagen);
+            this.storage.ref(filePath).delete().subscribe(() => {
+              this.db.object(`paseadores/${uid}`).remove().then(() => {
+                alert('Tu publicación como paseador ha sido eliminada correctamente.');
+                this.loadPaseadorData();  // Método para cargar nuevamente las publicaciones
+              }).catch(error => {
+                console.error('Error al eliminar los datos del paseador:', error);
+              });
+            }, error => {
+              console.error('Error al eliminar la imagen del paseador en Firebase Storage:', error);
+            });
+          } else {
+            console.error('No se encontró ninguna publicación de paseador o el paseador no tiene una imagen.');
+          }
+        });
+      }
+    });
   }
+}
   
   // Método auxiliar para extraer el archivo de la URL
   getFilePathFromUrl(url: string): string {

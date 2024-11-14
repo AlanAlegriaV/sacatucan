@@ -13,6 +13,7 @@ export class DetallePaseadorPage implements OnInit {
 
   paseador: any;
   usuarioActual: any = {};  // Usuario logueado
+  esMiPublicacion: boolean = false;  // Bandera para saber si el usuario es el dueño de la mascota
 
   constructor(private route: ActivatedRoute, private navCtrl: NavController, private db: AngularFireDatabase, private afAuth: AngularFireAuth ) { }
 
@@ -21,6 +22,7 @@ export class DetallePaseadorPage implements OnInit {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         const uid = user.uid;  // Obtener el UID del usuario logueado desde Firebase Auth
+        this.esMiPublicacion = user.uid === this.paseador.uid;
   
         if (uid) {
           // Buscar los datos del usuario actual en Realtime Database usando el UID
@@ -49,12 +51,6 @@ export class DetallePaseadorPage implements OnInit {
   // Volver a la página anterior
   goBack() {
     this.navCtrl.back();
-  }
-
-  // Verificar si la publicación es del usuario actual utilizando el UID
-  esMiPublicacion() {
-    // Compara el UID del paseador con el UID del usuario actual
-    return this.paseador.uid === this.usuarioActual.uid;
   }
 
 

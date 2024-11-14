@@ -27,20 +27,12 @@ export class PaseadoresPage implements OnInit {
   
       // Verificamos que allPaseadores no sea nulo y que sea un objeto
       if (allPaseadores && typeof allPaseadores === 'object') {
-        // Recorrer todos los paseadores
-        for (const ownerId in allPaseadores) {
-          if (allPaseadores.hasOwnProperty(ownerId)) {
-            const ownerPaseadores = allPaseadores[ownerId];
-  
-            // Recorrer todos los paseadores del dueño actual
-            for (const paseadorId in ownerPaseadores) {
-              if (ownerPaseadores.hasOwnProperty(paseadorId)) {
-                const paseador = ownerPaseadores[paseadorId];
-                paseador.uid = ownerId;  // UID del dueño del paseador
-                paseador.paseadorId = paseadorId;  // Agregar el ID del paseador
-                paseadoresCargados.push(paseador);  // Añadir el paseador a la lista
-              }
-            }
+        // Recorrer todos los paseadores directamente
+        for (const uid in allPaseadores) {
+          if (allPaseadores.hasOwnProperty(uid)) {
+            const paseador = allPaseadores[uid];
+            paseador.uid = uid;  // UID del dueño del paseador (ahora único identificador)
+            paseadoresCargados.push(paseador);  // Añadir el paseador a la lista
           }
         }
       }
@@ -48,6 +40,7 @@ export class PaseadoresPage implements OnInit {
       this.paseadores = paseadoresCargados;  // Asignar todos los paseadores cargados al array de paseadores
     });
   }
+  
 
 
   // Este método se ejecuta cada vez que se entra a la vista de nuevo

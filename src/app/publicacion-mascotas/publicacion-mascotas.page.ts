@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { MascotasModalEditPage } from '../mascotas-modal-edit/mascotas-modal-edit.page'; // Modal para editar mascota
 import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
 import { AngularFireDatabase } from '@angular/fire/compat/database'; // Importamos AngularFireDatabase para Realtime Database
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-publicacion-mascotas',
@@ -15,7 +16,7 @@ export class PublicacionMascotasPage {
   misMascotas: any[] = [];  // Publicaciones del usuario como mascotas
   mostrarMascotas: boolean = true;
 
-  constructor(private modalCtrl: ModalController, private afAuth: AngularFireAuth, private db: AngularFireDatabase) {  }
+  constructor(private modalCtrl: ModalController, private afAuth: AngularFireAuth, private db: AngularFireDatabase, private storage: AngularFireStorage) {  }
 
   ionViewWillEnter() {
     this.verMisMascotas();  // Cargar automáticamente las mascotas
@@ -53,7 +54,8 @@ export class PublicacionMascotasPage {
   eliminarMascota(mascota: any) {
     const uid = mascota.uid;  // UID del dueño de la mascota
     const mascotaId = mascota.mascotaId;  // Identificador único de la mascota
-  
+    const imagenUrl = mascota.imagenUrl;  // URL de la imagen, si existe
+    
     // Verificar que ambos valores estén presentes
     if (!uid || !mascotaId) {
       alert('No se pudo eliminar la mascota. Faltan datos de identificación.');
@@ -61,7 +63,17 @@ export class PublicacionMascotasPage {
     }
     
     if (confirm(`¿Estás seguro de eliminar la publicación de la mascota ${mascota.nombre}?`)) {
-      // Eliminar la mascota de Realtime Database
+      // Si hay una imagen asociada, eliminarla de Firebase Storage primero
+      if (imagenUrl) {
+        const filePath = this.getFilePathFromUrl(imagenUrl);  // Extrae la ruta del archivo desde la URL
+        this.storage.ref(filePath).delete().subscribe(() => {
+          console.log(`Imagen de la mascota ${mascota.nombre} eliminada de Storage.`);
+        }, error => {
+          console.error('Error al eliminar la imagen de Firebase Storage:', error);
+        });
+      }
+      
+      // Luego, eliminar los datos de la mascota en Realtime Database
       this.db.object(`mascotas/${uid}/${mascotaId}`).remove()
         .then(() => {
           alert(`La publicación de la mascota ${mascota.nombre} ha sido eliminada.`);
@@ -72,6 +84,14 @@ export class PublicacionMascotasPage {
           alert('Ocurrió un error al intentar eliminar la mascota. Inténtalo de nuevo.');
         });
     }
-  }  
+  }
+  
+  // Método auxiliar para extraer el archivo de la URL
+  getFilePathFromUrl(url: string): string {
+    const baseUrl = 'https://firebasestorage.googleapis.com/v0/b/sacatucan.appspot.com/o/';
+    const decodedUrl = decodeURIComponent(url); // Decodificar la URL
+    return decodedUrl.substring(baseUrl.length, decodedUrl.indexOf('?'));  // Obtener solo el path del archivo
+  }
+   
   
 }
