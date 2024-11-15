@@ -37,7 +37,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should navigate to mensajes', async () => {
+  it('Deberia navegar a la pagina mensaje', async () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
@@ -45,7 +45,7 @@ describe('AppComponent', () => {
     expect(mockMenuController.close).toHaveBeenCalled();
   });
 
-  it('should navigate to publicacion paseador', async () => {
+  it('Deberia navegar a la pagina publicacion paseador', async () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
@@ -53,7 +53,7 @@ describe('AppComponent', () => {
     expect(mockMenuController.close).toHaveBeenCalled();
   });
 
-  it('should verify authentication state', () => {
+  it('Verifica el estado de autenticacion', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
