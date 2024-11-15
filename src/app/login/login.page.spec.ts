@@ -1,33 +1,32 @@
-/* Logo */
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-}
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { LoginPage } from './login.page';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { RouterTestingModule } from '@angular/router/testing'; // Para simular navegación
 
-.logo {
-  width: 150px;
-  height: auto;
-}
+describe('LoginPage', () => {
+  let component: LoginPage;
+  let fixture: ComponentFixture<LoginPage>;
 
-/* Estilo personalizado para los inputs */
-.custom-item {
-  --highlight-color-focused: #3b82f6; /* Color azul para el borde de foco */
-  --background: #f9f9f9; /* Fondo claro */
-  --border-radius: 12px;
-  margin: 10px 0;
-}
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [LoginPage],
+      imports: [RouterTestingModule], // Módulo para simular rutas
+      providers: [
+        {
+          provide: AngularFireAuth,
+          useValue: {
+            signInWithEmailAndPassword: jasmine.createSpy('signInWithEmailAndPassword'), // Simula la función
+          },
+        },
+      ],
+    }).compileComponents();
 
-/* Estilo personalizado para los botones */
-.custom-button {
-  --background: #3b82f6; /* Color azul para el botón */
-  --border-radius: 20px;
-  font-weight: bold;
-  margin-top: 20px;
-  padding: 10px;
-}
+    fixture = TestBed.createComponent(LoginPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-.custom-button.outline {
-  --border-color: #3b82f6;
-  --color: #3b82f6;
-}
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
