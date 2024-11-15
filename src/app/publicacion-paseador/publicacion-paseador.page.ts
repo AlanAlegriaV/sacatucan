@@ -5,6 +5,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { take } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-publicacion-paseador',
@@ -16,7 +18,7 @@ export class PublicacionPaseadorPage {
   misPaseadores: any[] = [];  // Publicaciones del usuario como paseador
   mostrarPaseadores: boolean = true;
 
-  constructor(private modalCtrl: ModalController, private afAuth: AngularFireAuth, private db: AngularFireDatabase,  private storage: AngularFireStorage ) { }
+  constructor(private modalCtrl: ModalController, private afAuth: AngularFireAuth, private db: AngularFireDatabase,  private storage: AngularFireStorage, private changeDetector: ChangeDetectorRef ) { }
 
   ionViewWillEnter() {
     this.cargarDatosUsuario();  // Cargar datos del usuario al entrar en la vista
@@ -35,7 +37,10 @@ export class PublicacionPaseadorPage {
             console.log('Publicación de paseador actualizada:', this.misPaseadores);
           } else {
             console.log('No se encontró ninguna publicación de paseador para este usuario.');
+            this.misPaseadores = []; // Limpia el array si no hay publicación
           }
+           // Forzar la detección de cambios para asegurar la actualización en el template
+        this.changeDetector.detectChanges()
         });        
       } 
     });
@@ -114,6 +119,7 @@ export class PublicacionPaseadorPage {
             this.storage.ref(filePath).delete().subscribe(() => {
               this.db.object(`paseadores/${uid}`).remove().then(() => {
                 alert('Tu publicación como paseador ha sido eliminada correctamente.');
+                
                 this.loadPaseadorData();  // Método para cargar nuevamente las publicaciones
               }).catch(error => {
                 console.error('Error al eliminar los datos del paseador:', error);

@@ -1,8 +1,8 @@
 <ion-header>
-    <ion-title>Publicar como Paseador</ion-title>
-    <ion-buttons slot="end">
+  <ion-title>Publicar como Paseador</ion-title>
+  <ion-buttons slot="end">
     <ion-button (click)="cancelar()">Cerrar</ion-button>
-  </ion-buttons>   
+  </ion-buttons>
 </ion-header>
 
 <br><br><br><br><br><br><br><br>
@@ -32,9 +32,13 @@
     <ion-item>
       <ion-label>Subir imagen</ion-label>
       <input type="file" (change)="onFileChange($event)" accept="image/*">
+      <ion-button (click)="tomarFoto()">
+        <ion-icon name="camera"></ion-icon>
+      </ion-button>
     </ion-item>
 
-    <img *ngIf="publicarForm.value.imagen" [src]="publicarForm.value.imagen" alt="Previsualización de la imagen" style="width: 100%; height: auto; margin-top: 10px;">
+    <img *ngIf="publicarForm.value.imagen" [src]="publicarForm.value.imagen" alt="Previsualización de la imagen"
+      style="width: 100%; height: auto; margin-top: 10px;">
 
     <ion-button expand="full" type="submit" [disabled]="publicarForm.invalid">Guardar</ion-button>
   </form>

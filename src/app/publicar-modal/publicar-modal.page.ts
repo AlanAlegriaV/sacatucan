@@ -5,6 +5,8 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { finalize } from 'rxjs/operators';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 
 @Component({
   selector: 'app-publicar-modal',
@@ -105,6 +107,19 @@ export class PublicarModalPage implements OnInit {
   cancelar() {
     this.modalController.dismiss({ refresh: false });
   }
+
+  async tomarFoto() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera
+    });
+    
+    this.imagenBase64 = image.dataUrl!;
+    this.publicarForm.patchValue({ imagen: this.imagenBase64 });
+  }
+  
 
   // Método para manejar el cambio de imagen
   onFileChange(event: any) {
