@@ -8,19 +8,30 @@ import { of } from 'rxjs';
 describe('PaseadoresPage', () => {
   let component: PaseadoresPage;
   let fixture: ComponentFixture<PaseadoresPage>;
+  let dbSpy: any;
 
   beforeEach(async () => {
+    dbSpy = {
+      object: jasmine.createSpy('object').and.returnValue({
+        snapshotChanges: jasmine.createSpy('snapshotChanges').and.returnValue(
+          of({
+            payload: {
+              val: () => ({
+                testUID: {
+                  nombre: 'John Doe',
+                  experiencia: '2 años'
+                }
+              })
+            }
+          })
+        )
+      })
+    };
+
     await TestBed.configureTestingModule({
       declarations: [PaseadoresPage],
       providers: [
-        {
-          provide: AngularFireDatabase,
-          useValue: {
-            object: () => ({
-              snapshotChanges: () => of({ payload: { val: () => ({}) } })
-            })
-          }
-        },
+        { provide: AngularFireDatabase, useValue: dbSpy },
         {
           provide: ModalController,
           useValue: {
@@ -46,5 +57,12 @@ describe('PaseadoresPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('debería cargar paseadores desde Firebase', () => {
+    component.cargarPaseadores();
+    expect(dbSpy.object).toHaveBeenCalledWith('paseadores');
+    expect(component.paseadores.length).toBe(1);
+    expect(component.paseadores[0].nombre).toBe('John Doe');
   });
 });

@@ -40,18 +40,31 @@ describe('AppComponent', () => {
   it('Deberia navegar a la pagina mensaje', async () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-
-    await app.goToMensajes();
-    expect(mockMenuController.close).toHaveBeenCalled();
+  
+    const navigateSpy = spyOn(app['router'], 'navigate'); // Espiar el método `navigate` del Router
+    await app.goToMensajes(); // Llamar al método
+  
+    expect(navigateSpy).toHaveBeenCalledWith(['/mensaje']); // Verificar que se navegó a `/mensaje`
   });
+  
 
-  it('Deberia navegar a la pagina publicacion paseador', async () => {
+  it('Debería navegar a la página publicacion paseador ', async () => {
+    const mockMenuController = {
+      close: jasmine.createSpy('close').and.returnValue(Promise.resolve())
+    };
+  
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-
+  
+    // Reemplazar el controlador de menú del componente con el mock
+    app['menuCtrl'] = mockMenuController as any;
+  
     await app.goToPublicacionPaseador();
+  
+    // Verificar que el método close del mock fue llamado
     expect(mockMenuController.close).toHaveBeenCalled();
   });
+  
 
   it('Verifica el estado de autenticacion', () => {
     const fixture = TestBed.createComponent(AppComponent);

@@ -44,4 +44,29 @@ describe('PerfilPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('debería mostrar cambiar comuna', () => {
+    // Inicialmente, cambiarComuna debe ser falso
+    expect(component.cambiarComuna).toBeFalse();
+  
+    // Llamamos al método
+    component.mostrarCambioComuna();
+  
+    // Verificamos que cambiarComuna ahora sea true
+    expect(component.cambiarComuna).toBeTrue();
+  });
+
+
+  it('debería cancelar comuna', () => {
+    // Inicialmente, establecemos cambiarComuna a true para simular el estado anterior
+    component.cambiarComuna = true;
+  
+    // Llamamos al método
+    component.cancelarComuna();
+  
+    // Verificamos que cambiarComuna ahora sea false
+    expect(component.cambiarComuna).toBeFalse();
+  });
+  
+  
 });
