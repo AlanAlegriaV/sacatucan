@@ -11,10 +11,13 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';  // Importa
 })
 export class MascotasPage {
 
-  mascotas: any[] = [];
-  
+  mascotas: any[] = [];  // Inicializar el array de mascotas
 
-  constructor(private modalController: ModalController, private router: Router, private db: AngularFireDatabase) { }
+  constructor(
+    private modalController: ModalController, 
+    private router: Router, 
+    private db: AngularFireDatabase
+  ) {}
 
   ionViewWillEnter() {
     // Cargar las mascotas desde Realtime Database
@@ -22,51 +25,65 @@ export class MascotasPage {
   }
 
   cargarMascotas() {
-    this.db.object('mascotas').snapshotChanges().subscribe(snapshot => {
-      const mascotasCargadas: any[] = [];
+    this.db.object('mascotas').snapshotChanges().subscribe({
+      next: snapshot => {
+        const mascotasCargadas: any[] = [];
   
-      const allOwners = snapshot.payload.val() as { [key: string]: any };  // Aseguramos que es un objeto
+        // Realizamos un casting explícito para evitar el error
+        const allOwners = snapshot.payload.val() as { [key: string]: any } | null;
+        console.log('Datos recibidos de Firebase:', allOwners);
   
-      // Verificamos que allOwners no sea nulo y que sea un objeto
-      if (allOwners && typeof allOwners === 'object') {
-        // Recorrer todos los dueños
-        for (const ownerId in allOwners) {
-          if (allOwners.hasOwnProperty(ownerId)) {
-            const ownerMascotas = allOwners[ownerId];
+        // Verificar que allOwners no sea nulo y que sea un objeto válido
+        if (allOwners && typeof allOwners === 'object') {
+          for (const ownerId in allOwners) {
+            if (allOwners.hasOwnProperty(ownerId)) {
+              const ownerMascotas = allOwners[ownerId];
   
-            // Recorrer todas las mascotas del dueño actual
-            for (const mascotaId in ownerMascotas) {
-              if (ownerMascotas.hasOwnProperty(mascotaId)) {
-                const mascota = ownerMascotas[mascotaId];
-                mascota.uid = ownerId;  // UID del dueño
-                mascota.mascotaId = mascotaId;  // Agregar el ID de la mascota
-                mascotasCargadas.push(mascota);  // Añadir la mascota a la lista
+              // Verificar que ownerMascotas sea un objeto válido
+              if (ownerMascotas && typeof ownerMascotas === 'object') {
+                for (const mascotaId in ownerMascotas) {
+                  if (ownerMascotas.hasOwnProperty(mascotaId)) {
+                    const mascota = ownerMascotas[mascotaId];
+  
+                    // Verificar que mascota sea un objeto válido
+                    if (mascota && typeof mascota === 'object') {
+                      mascota.uid = ownerId; // UID del dueño
+                      mascota.mascotaId = mascotaId; // Agregar el ID de la mascota
+                      mascotasCargadas.push(mascota); // Añadir la mascota a la lista
+                    }
+                  }
+                }
               }
             }
           }
+        } else {
+          console.error('Error: No se encontraron datos de mascotas o el formato es incorrecto.');
         }
-      }
   
-      this.mascotas = mascotasCargadas;  // Asignar todas las mascotas cargadas al array de mascotas
+        this.mascotas = mascotasCargadas; // Asignar todas las mascotas cargadas al array de mascotas
+        console.log('Mascotas cargadas:', this.mascotas);
+      },
+      error: err => {
+        console.error('Error al cargar mascotas:', err);
+      }
     });
   }
   
-
   
+
   // Abrir el modal para publicar una nueva mascota
-async abrirModalMascota() {
-  const modal = await this.modalController.create({
-    component: PublicarMascotaModalPage
-  });
+  async abrirModalMascota() {
+    const modal = await this.modalController.create({
+      component: PublicarMascotaModalPage
+    });
 
-  // Al cerrar el modal, actualizar la lista de mascotas desde Firebase
-  modal.onDidDismiss().then(() => {
-    this.cargarMascotas();  // Llama a la función para cargar las mascotas desde Firebase
-  });
+    // Al cerrar el modal, actualizar la lista de mascotas desde Firebase
+    modal.onDidDismiss().then(() => {
+      this.cargarMascotas();  // Llama a la función para cargar las mascotas desde Firebase
+    });
 
-  return await modal.present();
-}
-
+    return await modal.present();
+  }
 
   // Ver detalles de una mascota
   async verDetallesMascota(mascota: any) {
