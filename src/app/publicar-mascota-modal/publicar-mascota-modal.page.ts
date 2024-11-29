@@ -6,6 +6,8 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';  // Importar 
 import { finalize } from 'rxjs/operators'; // Para manejar la finalización de la subida de imagen
 import { v4 as uuidv4 } from 'uuid';  // Importar uuid para generar identificadores únicos
 import { AngularFireAuth } from '@angular/fire/compat/auth';  // Importar AngularFireAuth
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 
 
 @Component({
@@ -61,6 +63,18 @@ export class PublicarMascotaModalPage {
         });
       }
     });
+  }
+
+  async tomarFoto() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera
+    });
+    
+    this.imagenBase64 = image.dataUrl!;
+    this.mascotaForm.patchValue({ imagen: this.imagenBase64 });
   }
 
   // Manejar el cambio de archivo (subir imagen)

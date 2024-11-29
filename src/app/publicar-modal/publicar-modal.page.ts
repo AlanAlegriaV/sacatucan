@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -108,24 +109,18 @@ export class PublicarModalPage implements OnInit {
     this.modalController.dismiss({ refresh: false });
   }
 
-// Código de la cámara en el archivo TS
-async tomarFoto() {
-  try {
+  async tomarFoto() {
     const image = await Camera.getPhoto({
       quality: 90,
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Camera,  // Usar la cámara nativa
       allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera
     });
-
-    // Asigna la imagen tomada
-    this.imagenBase64 = image.base64String!;
-    console.log('Imagen tomada:', this.imagenBase64);
-  } catch (error) {
-    console.error('Error al tomar la foto:', error);
-    alert('No se pudo acceder a la cámara.');
+    
+    this.imagenBase64 = image.dataUrl!;
+    this.publicarForm.patchValue({ imagen: this.imagenBase64 });
   }
-}
+  
 
   // Método para manejar el cambio de imagen
   onFileChange(event: any) {

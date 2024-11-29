@@ -38,6 +38,12 @@
       <input type="file" (change)="onFileChange($event)" accept="image/*" />
     </ion-item>
 
+    <ion-item>
+      <ion-button (click)="tomarFoto()">
+        <ion-icon name="camera"></ion-icon>
+      </ion-button>
+    </ion-item>
+
     <!-- Correo logueado oculto -->
     <ion-item>
       <ion-input formControlName="correo" type="hidden"></ion-input>
