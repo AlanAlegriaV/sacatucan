@@ -36,21 +36,33 @@ export class LoginPage {
 
   async iniciarSesion() {
     try {
-      // Intentamos iniciar sesión con Firebase Authentication
+      // Intentar iniciar sesión con Firebase Authentication
       const userCredential = await this.afAuth.signInWithEmailAndPassword(this.usuario.correo, this.usuario.password);
-
-      // Si el inicio de sesión es exitoso
-      console.log("Inicio de sesión exitoso:", userCredential.user);
-      this.error = '';  
-      alert('Inicio de sesión exitoso');
-      
-      // Redirigir a la página principal
-      this.router.navigate(['/mainpage']);
-      
+  
+      // Si la autenticación es exitosa, verificamos si es administrador
+      if (this.usuario.correo === 'admin_01@gmail.com' && this.usuario.password === 'Admin1234') {
+        console.log("Inicio de sesión como administrador exitoso:", userCredential.user);
+        this.error = '';
+        alert('Inicio de sesión como administrador exitoso');
+  
+        // Redirigir a la página de administración
+        this.router.navigate(['/admin']);
+      } else {
+        // Si no es administrador, es un usuario normal
+        console.log("Inicio de sesión como usuario normal exitoso:", userCredential.user);
+        this.error = '';
+        alert('Inicio de sesión exitoso');
+  
+        // Redirigir a la página principal
+        this.router.navigate(['/mainpage']);
+      }
     } catch (error) {
       // Manejo de errores
       console.error("Error al iniciar sesión:", error);
       this.error = 'Correo o contraseña incorrectos. Intenta nuevamente.';
+      this.usuario.correo = '';
+      this.usuario.password = '';
     }
   }
+    
 }

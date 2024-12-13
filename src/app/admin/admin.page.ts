@@ -1,60 +1,49 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/compat/auth'; // Importamos AngularFireAuth
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-admin',
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
 })
-export class AdminPage {
+export class AdminPage implements OnInit {
+  usuarios: any[] = []; // Propiedad para almacenar los usuarios
 
-  usuario = {
-    correo: '',
-    password: ''
-  };
+  constructor(private db: AngularFireDatabase, private router: Router) {}
 
-
-  error: string = ''; // Variable para almacenar el mensaje de error
-
-  constructor(private router: Router, private afAuth: AngularFireAuth) { }
-
-  ionViewWillEnter() {
-    // Limpiar los datos del formulario cuando se accede a la página de login
-    this.usuario.correo = '';
-    this.usuario.password = '';
+  ngOnInit() {
+    this.cargarUsuarios();
   }
 
-  goToLogin() {
-    this.router.navigate(['/login']);  // Asegúrate de que la ruta '/login' esté configurada
-  }
-  
-  async iniciarSesion() {
-    try {
-      // Credenciales predefinidas para el administrador
-      const adminEmail = 'admin_01@gmail.com';
-      const adminPassword = 'Admin1234';
-  
-      // Verificar si las credenciales ingresadas coinciden con las del administrador
-      if (this.usuario.correo === adminEmail && this.usuario.password === adminPassword) {
-        // Inicio de sesión exitoso
-        console.log('Inicio de sesión como administrador exitoso');
-        this.error = '';
-        alert('Inicio de sesión como administrador exitoso');
-  
-        // Redirigir a la página de administración
-        this.router.navigate(['/mainpage']); // Asegúrate de que la página "adminpage" exista y esté configurada en las rutas
-      } else {
-        // Credenciales incorrectas
-        this.error = 'Correo o contraseña de administrador incorrectos. Intenta nuevamente.';
-        alert(this.error);
-        this.usuario.correo = '';
-        this.usuario.password = '';
+  // Método para cargar usuarios desde Firebase
+  cargarUsuarios() {
+    this.db.object('usuarios').snapshotChanges().subscribe(snapshot => {
+      const usuariosCargados: any[] = [];
+      const allUsers = snapshot.payload.val() as { [key: string]: any };
+
+      // Validar que allUsers no sea nulo y sea un objeto
+      if (allUsers && typeof allUsers === 'object') {
+        for (const userId in allUsers) {
+          if (allUsers.hasOwnProperty(userId)) {
+            const usuario = allUsers[userId];
+            usuario.uid = userId; // Guardar el ID del usuario
+            usuariosCargados.push(usuario); // Agregar a la lista de usuarios
+          }
+        }
       }
-    } catch (error) {
-      // Manejo de errores
-      console.error('Error al iniciar sesión como administrador:', error);
-      this.error = 'Ocurrió un error inesperado. Intenta nuevamente.';
-    }
+
+      this.usuarios = usuariosCargados; // Asignar usuarios cargados a la propiedad
+      console.log('Usuarios cargados:', this.usuarios);
+    }, error => {
+      console.error('Error al cargar usuarios:', error);
+    });
   }
+
+  // Método para ver los detalles de un usuario
+  verDetallesUsuario(usuario: any) {
+    this.router.navigate(['/usuarios'], {
+      queryParams: { id: usuario.id, nombre: usuario.nombre },
+    });
   }
+}

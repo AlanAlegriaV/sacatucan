@@ -25,6 +25,7 @@
   ion-content {
     --background: #ffffff; /* Establece el fondo de la página a blanco */
     margin-top: 150px; /* Ajusta esto dependiendo de la altura del diseño superior */
+    font-size: small;
   }
   
   /* Estilo del logo */
@@ -34,41 +35,33 @@
     display: block;
     margin: 40px auto 20px; /* Ajustar el espacio superior e inferior */
   }
-  
-  /* Alinear los botones en una fila */
-  .button-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px; /* Espaciado entre los botones */
-    margin-top: 20px;
+
+  ion-card {
+    font-size: 8 rem; /* Reducir el tamaño de la fuente */
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
   }
   
-  /* Estilo general de los botones */
-  ion-button {
-    --border-radius: 20px; /* Bordes redondeados */
-    height: 50px;
-    min-width: 130px; /* Ancho mínimo para los botones */
-    font-size: 16px;
+  ion-card-title {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: capitalize;
   }
   
-  /* Estilo para el botón "Logueate" */
-  ion-button[color="primary"] {
-    --background: #3b82f6; /* Color azul para "Logueate" */
-    --color: white;
+  ion-card-content p {
+    margin: 5px 0;
   }
   
-  /* Estilo para el botón "Regístrate" */
-  ion-button[color="light"] {
-    --background: #ffffff; /* Fondo blanco */
-    --color: #3b82f6; /* Texto azul */
+  ion-col {
+    margin-bottom: 10px;
   }
   
-  /* Texto informativo */
-  p {
-    font-size: 16px;
-    color: #444; /* Color del texto */
+  h2 {
+    font-size: 1.5rem;
     margin: 20px 0;
-    text-align: center; /* Centrar el texto */
+    color: #333;
+    text-align: center;
   }
   
