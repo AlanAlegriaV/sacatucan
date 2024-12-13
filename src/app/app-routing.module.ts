@@ -66,7 +66,15 @@ const routes: Routes = [
   {
     path: 'publicacion-mascotas',
     loadChildren: () => import('./publicacion-mascotas/publicacion-mascotas.module').then( m => m.PublicacionMascotasPageModule)
+  },  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
+  },
+
 
 
 ];

@@ -29,6 +29,11 @@ export class LoginPage {
     this.router.navigate(['/registro']);  // Asegúrate de que la ruta '/registro' esté configurada
   }
 
+  goToAdmin() {
+    this.router.navigate(['/admin']); // Asegúrate de que la página 'admin' esté creada y registrada en las rutas.
+  }
+  
+
   async iniciarSesion() {
     try {
       // Intentamos iniciar sesión con Firebase Authentication
