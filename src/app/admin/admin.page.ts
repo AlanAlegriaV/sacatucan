@@ -42,8 +42,6 @@ export class AdminPage implements OnInit {
 
   // Método para ver los detalles de un usuario
   verDetallesUsuario(usuario: any) {
-    this.router.navigate(['/usuarios'], {
-      queryParams: { id: usuario.id, nombre: usuario.nombre },
-    });
+    this.router.navigate(['/usuarios'], { queryParams: { uid: usuario.uid } });
   }
 }

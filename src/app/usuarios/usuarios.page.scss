@@ -1,0 +1,82 @@
+/* Fondo del toolbar personalizado */
+.custom-toolbar {
+    --background: transparent; /* Mantén el toolbar transparente */
+    height: 60px; /* Ajusta la altura del toolbar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333; /* Color del texto */
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  /* Diseño superior con colores verde y cian */
+  .top-design {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #A8E6CF 50%, #56CCF2 50%);
+    clip-path: ellipse(70% 80% at 50% 0%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  /* Fondo blanco para el contenido */
+  ion-content {
+    --background: #ffffff; /* Establece el fondo de la página a blanco */
+    margin-top: 150px; /* Ajusta esto dependiendo de la altura del diseño superior */
+    font-size: small;
+  }
+  
+  /* Estilo del logo */
+  .logo {
+    width: 300px; /* Tamaño del logo */
+    height: auto;
+    display: block;
+    margin: 40px auto 20px; /* Ajustar el espacio superior e inferior */
+  }
+
+  ion-card {
+    font-size: 8 rem; /* Reducir el tamaño de la fuente */
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+  
+  ion-card-title {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  ion-card-content p {
+    margin: 5px 0;
+  }
+  
+  ion-col {
+    margin-bottom: 10px;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    color: #333;
+    text-align: center;
+  }
+  
+  ion-card {
+    margin: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  ion-card img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  ion-card-content {
+    text-align: center;
+  }
+  
